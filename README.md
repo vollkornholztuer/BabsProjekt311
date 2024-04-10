@@ -4,8 +4,8 @@ Dieses Projekt ist für die Uni und macht super viel Spaß.
 
 ## Installation von allen Dependencies (Windows 10/11)
 
-1. Python 3.11.7 installieren: https://www.python.org/downloads/release/python-3117/
-\1.1. Falls andere Python versionen installiert sind: Die Pfade von Python 3.11 in den Systemumgebungsvariablen nach ganz oben Setzen (höchte Priorität)
+1. Python 3.11.7 installieren: https://www.python.org/downloads/release/python-3117/\
+1.1. Falls andere Python versionen installiert sind: Die Pfade von Python 3.11 in den Systemumgebungsvariablen nach ganz oben Setzen (höchte Priorität)
 
 2. Github Repo herunterladen und in VSCode öffnen.
 
