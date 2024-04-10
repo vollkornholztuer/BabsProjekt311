@@ -13,7 +13,7 @@ Dieses Projekt ist für die Uni und macht super viel Spaß.
 3.1. Python 3.11.7 als interpreter in VSCode auswählen (Sicherheitshalber).
 
 4. Virtuelles Environment in VSCode einrichten.  
-4.1. In Konsole `python -m venv .venv` einrichten (mehr Hilfe: https://www.youtube.com/watch?v=GZbeL5AcTgw)
+4.1. In Konsole `python -m venv .venv` eingeben (mehr Hilfe: https://www.youtube.com/watch?v=GZbeL5AcTgw)
    
 5. CUDA 12 Toolkit herunterladen: https://developer.nvidia.com/cuda-downloads?target_os=Windows&target_arch=x86_64  
 (zwingend Notwendig für ZED SDK)
