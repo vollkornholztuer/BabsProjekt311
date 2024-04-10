@@ -26,7 +26,7 @@ Dieses Projekt ist für die Uni und macht super viel Spaß.
 \ In Konsole eingeben: `pip install cython numpy opencv-python pyopengl`
 \ (Quelle: https://www.stereolabs.com/docs/app-development/python/install#getting-started)
 
-\ \ 7.1 Mediapipe wie ZED SDK Python-API (Schritt 7 installieren) mit `pip install mediapipe`
+\ 7.1 Mediapipe wie ZED SDK Python-API (Schritt 7 installieren) mit `pip install mediapipe`
 
 8. get_python_api.py ausführen um den Rest der Dependencies für die ZED SDK installieren.
 
