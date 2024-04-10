@@ -16,7 +16,7 @@ Dieses Projekt ist für die Uni und macht super viel Spaß.
 4.1. In Konsole `python -m venv .venv` eingeben (mehr Hilfe: https://www.youtube.com/watch?v=GZbeL5AcTgw)
    
 5. CUDA 12 Toolkit herunterladen: https://developer.nvidia.com/cuda-downloads?target_os=Windows&target_arch=x86_64  
-(zwingend Notwendig für ZED SDK)
+(zwingend Notwendig für ZED SDK, evtl. Rechner nach Installation neu starten)
 
 6. ZED SDK installieren: https://www.stereolabs.com/developers/release  
 Rechner neustarten (Wie von Installationswizard verlangt)
