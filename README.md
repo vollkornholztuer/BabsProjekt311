@@ -48,3 +48,8 @@ Quelle: https://www.stereolabs.com/docs/app-development/python/install#getting-s
    `"python.analysis.extraPaths": [".venv\\Lib\\site-packages\\opencv_python-4.9.0.80.dist-info"],`
 
 Wenn bei den Strings in der Json schon was vorhanden ist, z.B. bei `"python.autoComplete.extraPaths"`, einfach den Pfad als String im Array hinzufügen.
+Beispiel:
+`"python.analysis.extraPaths": [
+        "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python36\\Lib\\site-packages\\cv2",
+        ".venv\\Lib\\site-packages\\opencv_python-4.9.0.80.dist-info"
+    ],`
