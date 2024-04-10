@@ -45,4 +45,6 @@ Quelle: https://www.stereolabs.com/docs/app-development/python/install#getting-s
 3. VSCode: Ctrl+Shift+P --> `Preferences: Open Workspace Settings (JSON)` auswählen  
 4. folgende Zeile einfügen:  
    `"python.autoComplete.extraPaths": [".venv\\Lib\\site-packages\\opencv_python-4.9.0.80.dist-info"],`  
-   `"python.analysis.extraPaths": [".venv\\Lib\\site-packages\\opencv_python-4.9.0.80.dist-info"],`  
+   `"python.analysis.extraPaths": [".venv\\Lib\\site-packages\\opencv_python-4.9.0.80.dist-info"],`
+
+Wenn bei den Strings in der Json schon was vorhanden ist, z.B. bei `"python.autoComplete.extraPaths"`, einfach den Pfad als String im Array hinzufügen.
