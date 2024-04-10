@@ -26,7 +26,7 @@ Dieses Projekt ist für die Uni und macht super viel Spaß.
 \ In Konsole eingeben: `pip install cython numpy opencv-python pyopengl`
 \ (Quelle: https://www.stereolabs.com/docs/app-development/python/install#getting-started)
 
-\ 7.1 Mediapipe wie ZED SDK Python-API (Schritt 7 installieren) mit `pip install mediapipe`
+7.1 Mediapipe wie ZED SDK Python-API (Schritt 7 installieren) mit `pip install mediapipe`
 
 8. get_python_api.py ausführen um den Rest der Dependencies für die ZED SDK installieren.
 
@@ -37,9 +37,10 @@ Dieses Projekt ist für die Uni und macht super viel Spaß.
 ## OpenCV hat kein Intellisense
 1. VSCode: Ctrl+Shift+P --> `Preferences: Open User Settings (JSON)` auswählen
 2. folgende Zeilen einfügen:
-   \ `"python.autoComplete.extraPaths": [".venv\\Lib\\site-packages\\opencv_python-4.9.0.80.dist-info"],`
-   \ `"python.analysis.extraPaths": [".venv\\Lib\\site-packages\\opencv_python-4.9.0.80.dist-info"],`
+`"python.autoComplete.extraPaths": [".venv\\Lib\\site-packages\\opencv_python-4.9.0.80.dist-info"],`
+`"python.analysis.extraPaths": [".venv\\Lib\\site-packages\\opencv_python-4.9.0.80.dist-info"],`
+
 3. VSCode: Ctrl+Shift+P --> `Preferences: Open Workspace Settings (JSON)` auswählen
 4. folgende Zeile einfügen:
-   \ `"python.autoComplete.extraPaths": [".venv\\Lib\\site-packages\\opencv_python-4.9.0.80.dist-info"],`
-   \ `"python.analysis.extraPaths": [".venv\\Lib\\site-packages\\opencv_python-4.9.0.80.dist-info"],`
+   `"python.autoComplete.extraPaths": [".venv\\Lib\\site-packages\\opencv_python-4.9.0.80.dist-info"],`
+   `"python.analysis.extraPaths": [".venv\\Lib\\site-packages\\opencv_python-4.9.0.80.dist-info"],`
