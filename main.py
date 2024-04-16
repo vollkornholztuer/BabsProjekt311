@@ -3,7 +3,7 @@ import mediapipe as mp
 
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands()
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 
 while True:
     # Read the frame
@@ -16,7 +16,7 @@ while True:
 
     # Mediapipe hands
     results = hands.process(frame_rgb)
-
+    landmarks_list = []
 
     # Draw landmarks
     if results.multi_hand_landmarks: # Check if there are hands detected
@@ -25,7 +25,9 @@ while True:
                 if i <= 20: 
                     x1 = int(landmark.x * frame.shape[1]) 
                     y1 = int(landmark.y * frame.shape[0])
-
+                    
+                    landmarks_list.append((x1, y1))
+                    
                     if i == 0: # Check if the landmark is the wrist
                         cv2.circle(frame, (x1, y1), 5, (255, 0, 0), -1)
                     else:
@@ -46,7 +48,9 @@ while True:
                         x0 = int(hand_landmarks.landmark[0].x * frame.shape[1])
                         y0 = int(hand_landmarks.landmark[0].y * frame.shape[0])
                         cv2.line(frame, (x1, y1), (x0, y0), (0, 255, 0), 2)
-                        
+
+        # 13 and 17
+        cv2.line(frame, (landmarks_list[13][0], landmarks_list[13][1]), (landmarks_list[17][0], landmarks_list[17][1]), (0, 255, 0), 2)
 
 
     cv2.imshow('Frame', frame)
