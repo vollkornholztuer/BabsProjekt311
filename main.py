@@ -44,13 +44,17 @@ while True:
                     if i%4 != 0:
                         cv2.line(frame, (x1, y1), (x2, y2), (0, 255, 0), 2) # Draw a line between the landmarks
                         
-                    if i == 17 or i == 5:
+                    if i == 1 or i == 5 or i == 17:
                         x0 = int(hand_landmarks.landmark[0].x * frame.shape[1])
                         y0 = int(hand_landmarks.landmark[0].y * frame.shape[0])
                         cv2.line(frame, (x1, y1), (x0, y0), (0, 255, 0), 2)
 
         # 13 and 17
         cv2.line(frame, (landmarks_list[13][0], landmarks_list[13][1]), (landmarks_list[17][0], landmarks_list[17][1]), (0, 255, 0), 2)
+        # # 5 und 9
+        cv2.line(frame, (landmarks_list[5][0], landmarks_list[5][1]), (landmarks_list[9][0], landmarks_list[9][1]), (0, 255, 0), 2)
+        # # 9 und 13
+        cv2.line(frame, (landmarks_list[9][0], landmarks_list[9][1]), (landmarks_list[13][0], landmarks_list[13][1]), (0, 255, 0), 2)
 
 
     cv2.imshow('Frame', frame)
