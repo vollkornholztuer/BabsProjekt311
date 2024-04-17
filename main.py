@@ -3,7 +3,7 @@ import mediapipe as mp
 
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands()
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 while True:
     # Read the frame
@@ -16,11 +16,12 @@ while True:
 
     # Mediapipe hands
     results = hands.process(frame_rgb)
-    landmarks_list = []
+    #landmarks_list = []
 
     # Draw landmarks
     if results.multi_hand_landmarks: # Check if there are hands detected
         for hand_landmarks in results.multi_hand_landmarks: # Iterate through the hands
+            landmarks_list = []
             for i, landmark in enumerate(hand_landmarks.landmark): # Iterate through the landmarks
                 if i <= 20: 
                     x1 = int(landmark.x * frame.shape[1]) 
@@ -49,12 +50,12 @@ while True:
                         y0 = int(hand_landmarks.landmark[0].y * frame.shape[0])
                         cv2.line(frame, (x1, y1), (x0, y0), (0, 255, 0), 2)
 
-        # 13 and 17
-        cv2.line(frame, (landmarks_list[13][0], landmarks_list[13][1]), (landmarks_list[17][0], landmarks_list[17][1]), (0, 255, 0), 2)
-        # # 5 und 9
-        cv2.line(frame, (landmarks_list[5][0], landmarks_list[5][1]), (landmarks_list[9][0], landmarks_list[9][1]), (0, 255, 0), 2)
-        # # 9 und 13
-        cv2.line(frame, (landmarks_list[9][0], landmarks_list[9][1]), (landmarks_list[13][0], landmarks_list[13][1]), (0, 255, 0), 2)
+            # 13 and 17
+            cv2.line(frame, (landmarks_list[13][0], landmarks_list[13][1]), (landmarks_list[17][0], landmarks_list[17][1]), (0, 255, 0), 2)
+            # 5 und 9
+            cv2.line(frame, (landmarks_list[5][0], landmarks_list[5][1]), (landmarks_list[9][0], landmarks_list[9][1]), (0, 255, 0), 2)
+            # 9 und 13
+            cv2.line(frame, (landmarks_list[9][0], landmarks_list[9][1]), (landmarks_list[13][0], landmarks_list[13][1]), (0, 255, 0), 2)
 
 
     cv2.imshow('Frame', frame)
