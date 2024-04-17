@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 
-img = cv2.imread('Test.jpg.png')
+img = cv2.imread('TestImage.png')
 
 kernel = np.ones((3,3),np.float32) * (-1)
 kernel[1,1] = 8
