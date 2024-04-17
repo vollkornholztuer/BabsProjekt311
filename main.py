@@ -59,38 +59,38 @@ while True:
                     
                     
                     if i <= 20:
-                        x1 = int(landmark.x * image_ocv.shape[1])
-                        y1 = int(landmark.y * image_ocv.shape[0])
+                        x1 = int(landmark.x * depth_image_ocv.shape[1])
+                        y1 = int(landmark.y * depth_image_ocv.shape[0])
                         
                         landmarks_list.append((x1, y1))
                         
                         if i == 0: # Check if the landmark is the wrist
-                            cv2.circle(image_ocv, (x1, y1), 5, (255, 0, 0), -1)
+                            cv2.circle(depth_image_ocv, (x1, y1), 5, (255, 0, 0), -1)
                         else:
-                            cv2.circle(image_ocv, (x1, y1), 5, (0, 0, 255), -1)
+                            cv2.circle(depth_image_ocv, (x1, y1), 5, (0, 0, 255), -1)
                             
-                        cv2.putText(image_ocv, str(i), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+                        cv2.putText(depth_image_ocv, str(i), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
                         
                     if i < 20:
                         landmark_next = hand_landmarks.landmark[i+1]
                         
-                    x2 = int(landmark_next.x * image_ocv.shape[1])
-                    y2 = int(landmark_next.y * image_ocv.shape[0])
+                    x2 = int(landmark_next.x * depth_image_ocv.shape[1])
+                    y2 = int(landmark_next.y * depth_image_ocv.shape[0])
                     
                     if i%4 != 0:
-                        cv2.line(image_ocv, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                        cv2.line(depth_image_ocv, (x1, y1), (x2, y2), (0, 255, 0), 2)
                         
                     if i == 1 or i == 5 or i == 17:
-                        x0 = int(hand_landmarks.landmark[0].x * image_ocv.shape[1])
-                        y0 = int(hand_landmarks.landmark[0].y * image_ocv.shape[0])
-                        cv2.line(image_ocv, (x1, y1), (x0, y0), (0, 255, 0), 2)
+                        x0 = int(hand_landmarks.landmark[0].x * depth_image_ocv.shape[1])
+                        y0 = int(hand_landmarks.landmark[0].y * depth_image_ocv.shape[0])
+                        cv2.line(depth_image_ocv, (x1, y1), (x0, y0), (0, 255, 0), 2)
                         
                 # 13 and 17
-                cv2.line(image_ocv, (landmarks_list[13][0], landmarks_list[13][1]), (landmarks_list[17][0], landmarks_list[17][1]), (0, 255, 0), 2)
+                cv2.line(depth_image_ocv, (landmarks_list[13][0], landmarks_list[13][1]), (landmarks_list[17][0], landmarks_list[17][1]), (0, 255, 0), 2)
                 # 5 und 9
-                cv2.line(image_ocv, (landmarks_list[5][0], landmarks_list[5][1]), (landmarks_list[9][0], landmarks_list[9][1]), (0, 255, 0), 2)
+                cv2.line(depth_image_ocv, (landmarks_list[5][0], landmarks_list[5][1]), (landmarks_list[9][0], landmarks_list[9][1]), (0, 255, 0), 2)
                 # 9 und 13
-                cv2.line(image_ocv, (landmarks_list[9][0], landmarks_list[9][1]), (landmarks_list[13][0], landmarks_list[13][1]), (0, 255, 0), 2)
+                cv2.line(depth_image_ocv, (landmarks_list[9][0], landmarks_list[9][1]), (landmarks_list[13][0], landmarks_list[13][1]), (0, 255, 0), 2)
         
         cv2.imshow("Image", image_ocv)
         cv2.imshow("Depth", depth_image_ocv)
