@@ -23,6 +23,7 @@ while True:
         for hand_landmarks in results.multi_hand_landmarks: # Iterate through the hands
             landmarks_list = []
             for i, landmark in enumerate(hand_landmarks.landmark): # Iterate through the landmarks
+                
                 if i <= 20: 
                     x1 = int(landmark.x * frame.shape[1]) 
                     y1 = int(landmark.y * frame.shape[0])
