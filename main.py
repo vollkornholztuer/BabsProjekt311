@@ -1,9 +1,18 @@
 import cv2
 import mediapipe as mp
+import numpy as np
 
 mp_hands = mp.solutions.hands
-hands = mp_hands.Hands()
-cap = cv2.VideoCapture(1)
+hands = mp_hands.Hands(static_image_mode=False, max_num_hands=2, min_detection_confidence=0.5)
+cap = cv2.VideoCapture(0)
+
+# Function to calculate distance
+def calculate_distance(p1, p2):
+    return np.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
+
+# Pinch state
+is_pinching = False
+dragging_point = None
 
 while True:
     # Read the frame
@@ -29,10 +38,7 @@ while True:
                     
                     landmarks_list.append((x1, y1))
                     
-                    if i == 0: # Check if the landmark is the wrist
-                        cv2.circle(frame, (x1, y1), 5, (255, 0, 0), -1)
-                    else:
-                        cv2.circle(frame, (x1, y1), 5, (0, 0, 255), -1)
+                    cv2.circle(frame, (x1, y1), 5, (0, 0, 255), -1)
                     
                     cv2.putText(frame, str(i), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
                     
@@ -50,6 +56,22 @@ while True:
                         y0 = int(hand_landmarks.landmark[0].y * frame.shape[0])
                         cv2.line(frame, (x1, y1), (x0, y0), (0, 255, 0), 2)
 
+            # Detect pinch between thumb tip (4) and index finger tip (8)
+            thumb_tip = landmarks_list[4]
+            index_tip = landmarks_list[8]
+            if calculate_distance(thumb_tip, index_tip) < 50:  # Threshold for pinch
+                is_pinching = True
+                dragging_point = ((thumb_tip[0] + index_tip[0]) // 2, (thumb_tip[1] + index_tip[1]) // 2)
+                cv2.circle(frame, dragging_point, 10, (0, 255, 0), -1)  # Visual feedback for pinching
+            else:
+                is_pinching = False
+
+             # Drag functionality
+            if is_pinching and dragging_point:
+                # Here you can update the position of the dragged object using `dragging_point`
+                cv2.circle(frame, dragging_point, 10, (255, 0, 0), -1)  # Visual feedback for dragging
+
+
             # 13 and 17
             cv2.line(frame, (landmarks_list[13][0], landmarks_list[13][1]), (landmarks_list[17][0], landmarks_list[17][1]), (0, 255, 0), 2)
             # 5 und 9
@@ -65,7 +87,6 @@ while True:
     key = cv2.waitKey(1)
     if key == 27:  # Check if the pressed key is ESC
         break
-
 
     # Check if the user closed the window and break the loop
     if cv2.getWindowProperty('Frame', cv2.WND_PROP_VISIBLE) < 1:
