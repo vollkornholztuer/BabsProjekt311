@@ -7,9 +7,6 @@ mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(static_image_mode=False, max_num_hands=2, min_detection_confidence=0.5)
 cap = cv2.VideoCapture(0)
 
-# todo:
-# - norm threshold so that distance to the cam doesnt matter!!!!
-
 # ingertips for clarity
 # middle_tip = landmarks_list[12]
 # wrist = landmarks_list[0]
@@ -17,6 +14,18 @@ cap = cv2.VideoCapture(0)
 # ring_tip = landmarks_list[16]
 # thumb_tip = landmarks_list[4]
 # index_tip = landmarks_list[8]
+
+# Hand middle point 
+def calculate_palm_points(landmarks_list):
+    wrist = np.array(landmarks_list[0])
+    thumb_base = np.array(landmarks_list[2])
+    index_base = np.array(landmarks_list[5])
+    middle_base = np.array(landmarks_list[9])
+    ring_base = np.array(landmarks_list[13])
+    pinky_base = np.array(landmarks_list[17])
+
+    return np.mean([wrist, thumb_base, index_base, middle_base, ring_base, pinky_base], axis=0)
+
 
 # Function to calculate distance
 def calculate_distance(p1, p2):
@@ -26,11 +35,11 @@ def calculate_distance(p1, p2):
 
 def detect_is_finger_down(landmarks_list):
     finger_status = {
-        'thumb_down': calculate_distance(landmarks_list[4], landmarks_list[0]) < 200,
-        'index_down': calculate_distance(landmarks_list[8], landmarks_list[0]) < 200,
-        'middle_down': calculate_distance(landmarks_list[12], landmarks_list[0]) < 300,
-        'ring_down': calculate_distance(landmarks_list[16], landmarks_list[0]) < 200,
-        'pinky_down': calculate_distance(landmarks_list[20], landmarks_list[0]) < 200
+        'thumb_down': calculate_distance(landmarks_list[4], landmarks_list[0]) < 0.5,
+        'index_down': calculate_distance(landmarks_list[8], landmarks_list[0]) < 0.5,
+        'middle_down': calculate_distance(landmarks_list[12], landmarks_list[0]) < 0.5,
+        'ring_down': calculate_distance(landmarks_list[16], landmarks_list[0]) < 0.5,
+        'pinky_down': calculate_distance(landmarks_list[20], landmarks_list[0]) < 0.5
     }
     return finger_status
 
@@ -98,10 +107,16 @@ while True:
             # 9 and 13
             cv2.line(frame, (landmarks_list[9][0], landmarks_list[9][1]), (landmarks_list[13][0], landmarks_list[13][1]), (0, 255, 0), 2)
 
-            detect_pinch(landmarks_list)
+            palm_center = calculate_palm_points(landmarks_list)
+            cv2.circle(frame, (int(palm_center[0]), int(palm_center[1])), 15, (255, 255, 255), 2)  # Visual feedback for palm center
 
-            if calculate_distance(landmarks_list[12], landmarks_list[0]) > 200 and detect_is_finger_down(landmarks_list)['pinky_down'] and detect_is_finger_down(landmarks_list)['ring_down'] and detect_is_finger_down(landmarks_list)['index_down']:
-                fu = True
+            # detect_pinch(landmarks_list)
+
+            # print(calculate_distance(landmarks_list[12], landmarks_list[0]))
+            # if detect_is_finger_down(landmarks_list)['pinky_down'] and detect_is_finger_down(landmarks_list)['ring_down'] and detect_is_finger_down(landmarks_list)['index_down']:
+            if landmarks_list[12][1] > int(palm_center[1]) and landmarks_list[8][1] < int(palm_center[1]) and landmarks_list[16][1] < int(palm_center[1]) and landmarks_list[20][1] < int(palm_center[1]):
+                # fu = True
+                print("Don't be mean!")
 
 
     # frame = cv2.resize(frame, (1280, 720)) // custom resolution
