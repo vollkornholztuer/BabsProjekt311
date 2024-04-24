@@ -58,6 +58,21 @@ def detect_pinch(landmarks_list, hand_size):
     else:
         is_pinching = False
 
+def draw_lines(i):
+    if show:
+        cv2.circle(frame, (x1, y1), 5, (0, 0, 255), -1)
+                    
+        cv2.putText(frame, str(i), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+
+        if i%4 != 0:
+            cv2.line(frame, (x1, y1), (x2, y2), (0, 255, 0), 2) # Draw a line between the landmarks
+            
+            if i == 1 or i == 5 or i == 17:
+                x0 = int(hand_landmarks.landmark[0].x * frame.shape[1])
+                y0 = int(hand_landmarks.landmark[0].y * frame.shape[0])
+                cv2.line(frame, (x1, y1), (x0, y0), (0, 255, 0), 2)
+
+
 # Pinch state
 is_pinching = False
 # dragging_point = None // what do i want to drag and how
@@ -90,34 +105,23 @@ while True:
                     
                     landmarks_list.append((x1, y1))
                     
-
-                    
                     if i < 20:
                         landmark_next = hand_landmarks.landmark[i+1] # Get the next landmark
                     
                     x2 = int(landmark_next.x * frame.shape[1])
                     y2 = int(landmark_next.y * frame.shape[0])
                     # z2 = int(landmark_next.z * frame.shape[2])
-                    
-                    if show:
-                        cv2.circle(frame, (x1, y1), 5, (0, 0, 255), -1)
-                    
-                        cv2.putText(frame, str(i), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
 
-                        if i%4 != 0:
-                            cv2.line(frame, (x1, y1), (x2, y2), (0, 255, 0), 2) # Draw a line between the landmarks
-                            
-                        if i == 1 or i == 5 or i == 17:
-                            x0 = int(hand_landmarks.landmark[0].x * frame.shape[1])
-                            y0 = int(hand_landmarks.landmark[0].y * frame.shape[0])
-                            cv2.line(frame, (x1, y1), (x0, y0), (0, 255, 0), 2)
-            if show:
-                # 13 and 17
-                cv2.line(frame, (landmarks_list[13][0], landmarks_list[13][1]), (landmarks_list[17][0], landmarks_list[17][1]), (0, 255, 0), 2)
-                # 5 and 9
-                cv2.line(frame, (landmarks_list[5][0], landmarks_list[5][1]), (landmarks_list[9][0], landmarks_list[9][1]), (0, 255, 0), 2)
-                # 9 and 13
-                cv2.line(frame, (landmarks_list[9][0], landmarks_list[9][1]), (landmarks_list[13][0], landmarks_list[13][1]), (0, 255, 0), 2)
+                    draw_lines(i)
+                    
+
+            # if show:
+            #     # 13 and 17
+            #     cv2.line(frame, (landmarks_list[13][0], landmarks_list[13][1]), (landmarks_list[17][0], landmarks_list[17][1]), (0, 255, 0), 2)
+            #     # 5 and 9
+            #     cv2.line(frame, (landmarks_list[5][0], landmarks_list[5][1]), (landmarks_list[9][0], landmarks_list[9][1]), (0, 255, 0), 2)
+            #     # 9 and 13
+            #     cv2.line(frame, (landmarks_list[9][0], landmarks_list[9][1]), (landmarks_list[13][0], landmarks_list[13][1]), (0, 255, 0), 2)
 
             palm_center = calculate_palm_points(landmarks_list)
             # cv2.circle(frame, (int(palm_center[0]), int(palm_center[1])), 15, (255, 255, 255), 2)  # Visual feedback for palm center
