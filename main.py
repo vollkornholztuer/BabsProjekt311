@@ -1,7 +1,7 @@
 import cv2
 
 from show import showImage
+cap = cv2.VideoCapture(0)
+showImage(cap)
 
-showImage()
-
-cv2.destroyAllWindows()
+cv2.destroyAllWindows() 
