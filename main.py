@@ -41,7 +41,7 @@ def normalized_distance(p1, p2, hand_size):
 def detect_is_finger_down(landmarks_list, hand_size):
     finger_status = {
         # 'thumb_down': normalized_distance(landmarks_list[4], landmarks_list[0], hand_size) < 0.25,
-        'index_down': normalized_distance(landmarks_list[8], landmarks_list[0], hand_size) < 1.5,
+        'index_down': normalized_distance(landmarks_list[8], landmarks_list[0], hand_size) < 2,
         'middle_down': normalized_distance(landmarks_list[12], landmarks_list[0], hand_size) < 1.5,
         'ring_down': normalized_distance(landmarks_list[16], landmarks_list[0], hand_size) < 1.5,
         'pinky_down': normalized_distance(landmarks_list[20], landmarks_list[0], hand_size) < 1.5
