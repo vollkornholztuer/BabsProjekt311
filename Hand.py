@@ -10,7 +10,6 @@ import numpy as np
 
 # Hand middle point 
 
-
 def calculate_palm_points(landmarks_list):
     wrist = np.array(landmarks_list[0])
     thumb_base = np.array(landmarks_list[2])
@@ -50,7 +49,7 @@ def detect_is_finger_down(landmarks_list, hand_size):
 
 
 def detect_wave(arr):
-    if len(arr) < 30:
+    if len(arr) < 10   :
         return False
     
     # Initialize direction switch count
@@ -86,7 +85,7 @@ def detect_open_palm(landmarks_list, hand_size):
         return 0
     
     
-def getDraggingPoint(landmarks_list):
+def getDraggingPoint(landmarks_list): # calc middle point between both tips
     return ((landmarks_list[4][0] + landmarks_list[8][0]) // 2, (landmarks_list[4][1] + landmarks_list[8][1]) // 2)
 
 
@@ -98,3 +97,9 @@ def printHandCoords(landmarks_list, hand_size):
     print("ring: ", normalized_distance(landmarks_list[16], landmarks_list[0], hand_size))
     print("pinky: ", normalized_distance(landmarks_list[20], landmarks_list[0], hand_size))
     print("\n")
+    
+def detect_pinch(landmarks_list, hand_size):
+    if normalized_distance(landmarks_list[4], landmarks_list[8], hand_size) < 0.25 and not detect_is_finger_down(landmarks_list, hand_size)['index_down']:
+        return True
+    else:
+        return False
