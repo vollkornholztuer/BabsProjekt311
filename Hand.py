@@ -53,6 +53,9 @@ def detect_is_finger_down(landmarks_list, hand_size):
 def detect_wave(arr):
     # Initialize direction switch count
     direction_switch = 0
+    
+    # TODO: threshold for wave detection
+    
     # no early wave detection
     if len(arr) >= 10:
         # Start scanning from the second last element
