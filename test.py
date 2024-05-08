@@ -85,20 +85,27 @@ while True:
         
     frame = cv2.resize(frame, None, fx=1, fy=1, interpolation=cv2.INTER_AREA)
 
-    image_path = 'testImage.png'
-    original_image =  cv2.imread('testFrame', frame)      #cv2.imread(image_path)
+    # image_path = 'testImage.png'
+    # original_image =  cv2.imread('testFrame', frame)      #cv2.imread(image_path)
+    original_image = frame
     shifted_image = original_image.copy()
     draw_grid(shifted_image, block_size)
+    
+    if original_image is not None:
+        cv2.imshow('Shifted Image', shifted_image)
+        cv2.setMouseCallback('Shifted Image', mouse_callback)
+    
+    c = cv2.waitKey(1)
+    if c == 27:
+        break
 
-if original_image is not None:
-    cv2.imshow('Shifted Image', shifted_image)
-    cv2.setMouseCallback('Shifted Image', mouse_callback)
+    
 
-    while True:
-        key = cv2.waitKey(1) & 0xFF
-        if key == ord('q'):
-            break
+    #     while True:
+    #         key = cv2.waitKey(1) & 0xFF
+    #         if key == ord('q'):
+    #             break
 
-    cv2.destroyAllWindows()
-else:
-    print("Error loading the image.")
+    #     cv2.destroyAllWindows()
+    # else:
+    #     print("Error loading the image.")
