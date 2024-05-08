@@ -11,7 +11,7 @@ def showImage(cap):
         
         # show images 
         cv2.imshow('Input', frame)
-        cv2.imshow("second Input", frame)
+        #cv2.imshow("second Input", frame)
         
         c = cv2.waitKey(1)
         if c == 27:
