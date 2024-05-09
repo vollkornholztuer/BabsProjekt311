@@ -24,10 +24,9 @@ seed = random.randrange(sys.maxsize)
 rng = random.Random(seed)
 print("Seed was:", seed)
 
-while True:
-    ret, frame = cap.read()
-    cv2.imshow('testFrame', frame)
-    
+
+# Split Frame into Blocks
+def split_frame(frame):
     # frame[y1:y2, x1:x2]
     frame_block_0_0 = frame[0:height//grid_size, 0:width//grid_size]
     frame_block_0_1 = frame[0:height//grid_size, width//grid_size:2*width//grid_size]
@@ -139,7 +138,7 @@ while True:
     frame_block_9_8 = frame[9*height//grid_size:10*height//grid_size, 8*width//grid_size:9*width//grid_size]
     frame_block_9_9 = frame[9*height//grid_size:10*height//grid_size, 9*width//grid_size:10*width//grid_size]
     
-    frame_blocks_original = [
+    frame_blocks = [
         frame_block_0_0, frame_block_0_1, frame_block_0_2, frame_block_0_3, frame_block_0_4, frame_block_0_5, frame_block_0_6, frame_block_0_7, frame_block_0_8, frame_block_0_9,
         frame_block_1_0, frame_block_1_1, frame_block_1_2, frame_block_1_3, frame_block_1_4, frame_block_1_5, frame_block_1_6, frame_block_1_7, frame_block_1_8, frame_block_1_9,
         frame_block_2_0, frame_block_2_1, frame_block_2_2, frame_block_2_3, frame_block_2_4, frame_block_2_5, frame_block_2_6, frame_block_2_7, frame_block_2_8, frame_block_2_9,
@@ -151,37 +150,39 @@ while True:
         frame_block_8_0, frame_block_8_1, frame_block_8_2, frame_block_8_3, frame_block_8_4, frame_block_8_5, frame_block_8_6, frame_block_8_7, frame_block_8_8, frame_block_8_9,
         frame_block_9_0, frame_block_9_1, frame_block_9_2, frame_block_9_3, frame_block_9_4, frame_block_9_5, frame_block_9_6, frame_block_9_7, frame_block_9_8, frame_block_9_9
     ]
+    
+    return frame_blocks
+
+
+
+while True:
+    ret, frame = cap.read()
+    cv2.imshow('testFrame', frame)
 
     # index_videoblock = frame_blocks_original
-    frame_blocks_shuffeled = frame_blocks_original
-    random.Random(seed).shuffle(frame_blocks_shuffeled)
+    frame_blocks_original = split_frame(frame)
     
-    index_videoblock[0:10] = frame_blocks_shuffeled[0:10]
-    index_videoblock[10:20] = frame_blocks_shuffeled[10:20]
-    index_videoblock[20:30] = frame_blocks_shuffeled[20:30]
-    index_videoblock[30:40] = frame_blocks_shuffeled[30:40]
-    index_videoblock[40:50] = frame_blocks_shuffeled[40:50]
-    index_videoblock[50:60] = frame_blocks_shuffeled[50:60]
-    index_videoblock[60:70] = frame_blocks_shuffeled[60:70]
-    index_videoblock[70:80] = frame_blocks_shuffeled[70:80]
-    index_videoblock[80:90] = frame_blocks_shuffeled[80:90]
-    index_videoblock[90:100] = frame_blocks_shuffeled[90:100]
+    
+    frame_blocks_shuffeled = frame_blocks_original
+    random.Random(seed).shuffle(frame_blocks_shuffeled) # TODO: 
+    
+    index_videoblock[0:100] = frame_blocks_shuffeled[0:100]
     
     cv2.imshow('test1', index_videoblock[0])
     
-    final1 = cv2.vconcat(index_videoblock[0:10])
-    final2 = cv2.vconcat(index_videoblock[10:20])
-    final3 = cv2.vconcat(index_videoblock[20:30])
-    final4 = cv2.vconcat(index_videoblock[30:40])
-    final5 = cv2.vconcat(index_videoblock[40:50])
-    final6 = cv2.vconcat(index_videoblock[50:60])
-    final7 = cv2.vconcat(index_videoblock[60:70])
-    final8 = cv2.vconcat(index_videoblock[70:80])
-    final9 = cv2.vconcat(index_videoblock[80:90])
-    final10 = cv2.vconcat(index_videoblock[90:100])
+    row1 = cv2.vconcat(index_videoblock[0:10])
+    row2 = cv2.vconcat(index_videoblock[10:20])
+    row3 = cv2.vconcat(index_videoblock[20:30])
+    row4 = cv2.vconcat(index_videoblock[30:40])
+    row5 = cv2.vconcat(index_videoblock[40:50])
+    row6 = cv2.vconcat(index_videoblock[50:60])
+    row7 = cv2.vconcat(index_videoblock[60:70])
+    row8 = cv2.vconcat(index_videoblock[70:80])
+    row9 = cv2.vconcat(index_videoblock[80:90])
+    row10 = cv2.vconcat(index_videoblock[90:100])
     
 
-    final = cv2.hconcat([final1, final2, final3, final4, final5, final6, final7, final8, final9, final10])
+    final = cv2.hconcat([row1, row2, row3, row4, row5, row6, row7, row8, row9, row10])
     
     cv2.imshow('finalFrame', final)
                         
