@@ -7,7 +7,7 @@ index_videoblock = []
 
 seed = random.randrange(sys.maxsize)
 rng = random.Random(seed)
-print("Seed was:", seed)
+# print("Seed was:", seed)
 
 def split_frame(frame, height, width):
     grid_size = 4
@@ -36,7 +36,6 @@ def split_frame(frame, height, width):
             frame_block_1_0, frame_block_1_1, frame_block_1_2, frame_block_1_3,
             frame_block_2_0, frame_block_2_1, frame_block_2_2, frame_block_2_3,
             frame_block_3_0, frame_block_3_1, frame_block_3_2, frame_block_3_3]
-    
 
 def stitchBlocks(frame, changes_to_videoblock_order):
     frame_blocks_shuffeled = frame
