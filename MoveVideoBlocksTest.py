@@ -2,7 +2,7 @@
 import sys
 import cv2
 import random
-import threading
+# import threading
 
 grid_size = 4
 
@@ -47,7 +47,7 @@ frame_blocks_shuffeled = []
 set_videoblocks_to_index = False
 index_videoblock = []
 
-changes_to_videoblock_order = []
+# changes_to_videoblock_order = []
 
 seed = random.randrange(sys.maxsize)
 rng = random.Random(seed)
@@ -83,24 +83,24 @@ print("Seed was:", seed)
 #         if cv2.waitKey(1) & 0xFF == ord('q'):
 #             break  # if the 'q' key is pressed, break from the loop
 
-def async_input_videoblock_changes():
-    while True:
+# def async_input_videoblock_changes(changes_to_videoblock_order):
+#     while True:
     
-        index_to_swap1 = input("Enter index to swap 1: ")
-        index_to_swap2 = input("Enter index to swap 2: ")
-        swap = (int(index_to_swap1), int(index_to_swap2))
+#         index_to_swap1 = input("Enter index to swap 1: ")
+#         index_to_swap2 = input("Enter index to swap 2: ")
+#         swap = (int(index_to_swap1), int(index_to_swap2))
         
-        changes_to_videoblock_order.append(swap)
+#         changes_to_videoblock_order.append(swap)
 
-# Creating threads
-# thread1 = threading.Thread(target=async_video_feed)
-# thread2 = threading.Thread(target=async_input_videoblock_changes)
+# # # Creating threads
+# # thread1 = threading.Thread(target=async_video_feed)
+# # thread2 = threading.Thread(target=async_input_videoblock_changes)
 
-# Starting threads
+# # Starting threads
 # thread1.start()
 # thread2.start()
 
-def stitchBlocks(frame):
+def stitchBlocks(frame, changes_to_videoblock_order):
     frame_blocks_shuffeled = frame
     random.Random(seed).shuffle(frame_blocks_shuffeled) # TODO: 
     
