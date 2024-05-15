@@ -59,7 +59,7 @@ if image is not None:
                 A = 20 * (y - height/4)/height*4
             else: 
                 A = 20 * (3 * height/4 - y)/height*4
-            source_y = round( y + A * math.cos(2* math.pi * y / height + phi))
+            source_y = round( y +  A* math.cos(2* math.pi * y / height + phi))
             for x in range(width): 
                 
                 shifted_image[y, x] = image[source_y, x]
