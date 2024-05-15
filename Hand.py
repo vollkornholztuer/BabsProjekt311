@@ -118,7 +118,7 @@ def draw_lines(i, x1, y1, x2, y2, hand_landmarks, frame, show):
                 cv2.line(frame, (x1, y1), (x0, y0), (0, 255, 0), 2)
 
 
-def landmarks(frame, results, show, x_hand_offset_arr):
+def landmarks(frame, results, show):
     if results.multi_hand_landmarks: # Check if there are hands detected
         for hand_landmarks in results.multi_hand_landmarks: # Iterate through the hands
             landmarks_list = []
@@ -144,15 +144,15 @@ def landmarks(frame, results, show, x_hand_offset_arr):
                 dragging_point = getDraggingPoint(landmarks_list)
                 cv2.circle(frame, dragging_point, 10, (255, 255, 255), 2)  # Visual feedback for pinching
             
-            handPositionX = detect_open_palm(landmarks_list, hand_size)
-            if handPositionX != 0:
-                x_hand_offset_arr = np.append(x_hand_offset_arr, handPositionX)
-                print(x_hand_offset_arr)
+            # handPositionX = detect_open_palm(landmarks_list, hand_size)
+            # if handPositionX != 0:
+            #     x_hand_offset_arr = np.append(x_hand_offset_arr, handPositionX)
+            #     print(x_hand_offset_arr)
             
-            if (detect_wave(x_hand_offset_arr) or len(x_hand_offset_arr) > 20):
-                x_hand_offset_arr = np.array([]) # reset array
+    #         if (detect_wave(x_hand_offset_arr) or len(x_hand_offset_arr) > 20):
+    #             x_hand_offset_arr = np.array([]) # reset array
                 
-            key = cv2.waitKey(1)
-            if key == ord('p'):
-                printHandCoords(landmarks_list, hand_size)
-    return x_hand_offset_arr
+    #         key = cv2.waitKey(1)
+    #         if key == ord('p'):
+    #             printHandCoords(landmarks_list, hand_size)
+    # return x_hand_offset_arr

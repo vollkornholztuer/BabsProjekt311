@@ -3,12 +3,10 @@ import sys
 import cv2
 import random
 import threading
-import time
-
 
 grid_size = 4
 
-def split_frame(frame):
+def split_frame(frame, height, width):
     frame_block_0_0 = frame[0:height//grid_size, 0:width//grid_size]
     frame_block_0_1 = frame[0:height//grid_size, width//grid_size:2*width//grid_size]
     frame_block_0_2 = frame[0:height//grid_size, 2*width//grid_size:3*width//grid_size]
@@ -35,13 +33,13 @@ def split_frame(frame):
             frame_block_3_0, frame_block_3_1, frame_block_3_2, frame_block_3_3]
     
 
-cap = cv2.VideoCapture(0)
+# cap = cv2.VideoCapture(0)
 
-width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
-height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
-width = int(width)
-height = int(height)
-print(width, height)
+# width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+# height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+# width = int(width)
+# height = int(height)
+# print(width, height)
 
 videoblocks_are_shuffled = False
 frame_blocks_shuffeled = []
@@ -55,35 +53,35 @@ seed = random.randrange(sys.maxsize)
 rng = random.Random(seed)
 print("Seed was:", seed)
 
-def async_video_feed():
-    while True:
-        ret, frame = cap.read()
-        cv2.imshow('testFrame', frame)
+# def async_video_feed():
+#     while True:
+#         ret, frame = cap.read()
+#         cv2.imshow('testFrame', frame)
 
-        # index_videoblock = frame_blocks_original
-        frame_blocks_original = split_frame(frame)
+#         # index_videoblock = frame_blocks_original
+#         frame_blocks_original = split_frame(frame)
         
-        frame_blocks_shuffeled = frame_blocks_original
-        random.Random(seed).shuffle(frame_blocks_shuffeled) # TODO: 
+#         frame_blocks_shuffeled = frame_blocks_original
+#         random.Random(seed).shuffle(frame_blocks_shuffeled) # TODO: 
         
-        for change in changes_to_videoblock_order:
-            temp = frame_blocks_shuffeled[change[0]]
-            frame_blocks_shuffeled[change[0]] = frame_blocks_shuffeled[change[1]]
-            frame_blocks_shuffeled[change[1]] = temp
+#         for change in changes_to_videoblock_order:
+#             temp = frame_blocks_shuffeled[change[0]]
+#             frame_blocks_shuffeled[change[0]] = frame_blocks_shuffeled[change[1]]
+#             frame_blocks_shuffeled[change[1]] = temp
         
-        index_videoblock[0:16] = frame_blocks_shuffeled[0:16]
+#         index_videoblock[0:16] = frame_blocks_shuffeled[0:16]
         
-        row1 = cv2.vconcat(index_videoblock[0:4])
-        row2 = cv2.vconcat(index_videoblock[4:8])
-        row3 = cv2.vconcat(index_videoblock[8:12])
-        row4 = cv2.vconcat(index_videoblock[12:16])
+#         row1 = cv2.vconcat(index_videoblock[0:4])
+#         row2 = cv2.vconcat(index_videoblock[4:8])
+#         row3 = cv2.vconcat(index_videoblock[8:12])
+#         row4 = cv2.vconcat(index_videoblock[12:16])
         
-        final = cv2.hconcat([row1, row2, row3, row4])
+#         final = cv2.hconcat([row1, row2, row3, row4])
         
-        cv2.imshow('final', final)
+#         cv2.imshow('final', final)
         
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break  # if the 'q' key is pressed, break from the loop
+#         if cv2.waitKey(1) & 0xFF == ord('q'):
+#             break  # if the 'q' key is pressed, break from the loop
 
 def async_input_videoblock_changes():
     while True:
@@ -95,9 +93,29 @@ def async_input_videoblock_changes():
         changes_to_videoblock_order.append(swap)
 
 # Creating threads
-thread1 = threading.Thread(target=async_video_feed)
-thread2 = threading.Thread(target=async_input_videoblock_changes)
+# thread1 = threading.Thread(target=async_video_feed)
+# thread2 = threading.Thread(target=async_input_videoblock_changes)
 
 # Starting threads
-thread1.start()
-thread2.start()
+# thread1.start()
+# thread2.start()
+
+def stitchBlocks(frame):
+    frame_blocks_shuffeled = frame
+    random.Random(seed).shuffle(frame_blocks_shuffeled) # TODO: 
+    
+    for change in changes_to_videoblock_order:
+        temp = frame_blocks_shuffeled[change[0]]
+        frame_blocks_shuffeled[change[0]] = frame_blocks_shuffeled[change[1]]
+        frame_blocks_shuffeled[change[1]] = temp
+    
+    index_videoblock[0:16] = frame_blocks_shuffeled[0:16]
+    
+    row1 = cv2.vconcat(index_videoblock[0:4])
+    row2 = cv2.vconcat(index_videoblock[4:8])
+    row3 = cv2.vconcat(index_videoblock[8:12])
+    row4 = cv2.vconcat(index_videoblock[12:16])
+    
+    final = cv2.hconcat([row1, row2, row3, row4])
+
+    return final
