@@ -8,7 +8,7 @@ if not cap.isOpened():
     exit()
 
 phi = 0
-sign = 1
+sign = 2
 
 while True:
     ret, frame = cap.read()  # Erfassen eines Frames von der Webcam
@@ -22,9 +22,9 @@ while True:
     phi = phi + 0.1 * sign
     if phi > math.pi:
         if sign > 0:
-            sign = -1
+            sign = -2
         else:
-            sign = 1
+            sign = 2
 
     for y in range(height // 4, height - height // 4):
         if y < height // 2:
