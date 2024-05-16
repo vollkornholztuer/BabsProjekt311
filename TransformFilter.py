@@ -12,29 +12,29 @@ def mouse_callback(event, x, y, flags, param):
     global dragging, start_x, start_y, selected_pixels
 
     if event == cv2.EVENT_LBUTTONDOWN:
-        dragging = True
-        start_x, start_y = x, y
-        selected_pixels = image[y-10:y+10, x-10:x+10].copy()  # Auswahl von 10x10 Pixel um den Mauszeiger
-    elif event == cv2.EVENT_MOUSEMOVE:
-        if dragging:
-            move_image(x, y)
-    elif event == cv2.EVENT_LBUTTONUP:
-        dragging = False
+        #dragging = True
+        #start_x, start_y = x, y
+        selected_pixels = image[y-10:y+10, x-10:x+10].copy()  # Auswahl von 20x20 Pixel um den Mauszeiger
+    # elif event == cv2.EVENT_MOUSEMOVE:
+        # if dragging:
+        #     move_image(x, y)
+    # elif event == cv2.EVENT_LBUTTONUP:
+    #     dragging = False
 
 # Funktion zum Verschieben des ausgewählten 10x10 Pixelbereichs
-def move_image(x, y):
-    global image, shifted_image, selected_pixels
-    if selected_pixels is not None:  
-        # Berechne Verschiebung
-        dx = x - start_x
-        dy = y - start_y
-        # Verschiebe ausgewählte Pixel
-        shifted_image = image.copy()
-        shifted_image[start_y-10:start_y+10, start_x-10:start_x+10] = 0  # Setze ursprüngliche Pixel auf Schwarz
-        shifted_image[y-10:y+10, x-10:x+10] = selected_pixels  # Setze ausgewählte Pixel an die neue Position
-        cv2.imshow('Shifted Image', shifted_image)
-    else:
-        print("Bitte wählen Sie zuerst einen Bereich aus.")
+# def move_image(x, y):
+#     global image, shifted_image, selected_pixels
+#     if selected_pixels is not None:  
+#         # Berechne Verschiebung
+#         dx = x - start_x
+#         dy = y - start_y
+#         # Verschiebe ausgewählte Pixel
+#         shifted_image = image.copy()
+#         shifted_image[start_y-10:start_y+10, start_x-10:start_x+10] = 0  # Setze ursprüngliche Pixel auf Schwarz
+#         shifted_image[y-10:y+10, x-10:x+10] = selected_pixels  # Setze ausgewählte Pixel an die neue Position
+#         cv2.imshow('Shifted Image', shifted_image)
+#     else:
+#         print("Bitte wählen Sie zuerst einen Bereich aus.")
 
 # Bild laden
 image = cv2.imread('testImage.png')
