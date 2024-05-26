@@ -10,6 +10,7 @@ import cv2
 
 # Pinch state
 is_pinching = False
+x_hand_positions = []
 
 # Hand middle point
 def calculate_palm_points(landmarks_list):
@@ -50,38 +51,36 @@ def detect_is_finger_down(landmarks_list, hand_size):
     return finger_status
 
 
-def detect_wave(arr):
-    # Initialize direction switch count
-    direction_switch = 0
+def detect_wave(landmarks_list):
+    global x_hand_positions
+    threshold = 3
+    min_distance = 5
     
-    # TODO: threshold for wave detection
+    palm_center = calculate_palm_points(landmarks_list)
+    x_hand_positions.append(palm_center[0])
     
-    # no early wave detection
-    if len(arr) >= 10:
-        # Start scanning from the second last element
-        for i in range(len(arr) -3, -1, -1):
-            # print("i:", i, "len(arr):", len(arr))
-            if arr[i] < arr[i + 1]:  # Increasing
-                if arr[i + 1] > arr[i + 2]:  # Switching direction
-                    direction_switch += 1
-            elif arr[i] > arr[i + 1]:  # Decreasing
-                if arr[i + 1] < arr[i + 2]:  # Switching direction
-                    direction_switch += 1
-    else:
-        return False
-                
-    if direction_switch >= 3:
+    # Keep only the last 20 positions
+    if len(x_hand_positions) > 20:
+        x_hand_positions.pop(0)
+    
+    direction_changes = 0
+    
+    # Check the number of direction changes
+    for i in range(1, len(x_hand_positions) - 1):
+        if abs(x_hand_positions[i] - x_hand_positions[i - 1]) > min_distance and abs(x_hand_positions[i] - x_hand_positions[i + 1]) > min_distance:
+            if (x_hand_positions[i] > x_hand_positions[i - 1] and x_hand_positions[i] > x_hand_positions[i + 1]) or \
+               (x_hand_positions[i] < x_hand_positions[i - 1] and x_hand_positions[i] < x_hand_positions[i + 1]):
+                direction_changes += 1
+    
+    if direction_changes >= threshold:
         print("WAVING GESTURE DETECTED")
         return True
-    else:
-        return False
+    return False
     
-    
+
 def detect_open_palm(landmarks_list, hand_size):
     if not detect_is_finger_down(landmarks_list, hand_size)['index_down'] and not detect_is_finger_down(landmarks_list, hand_size)['middle_down'] and not detect_is_finger_down(landmarks_list, hand_size)['ring_down'] and not detect_is_finger_down(landmarks_list, hand_size)['pinky_down']:
         return landmarks_list[0][1]
-    else:
-        return 0
     
     
 def getDraggingPoint(landmarks_list): # calc middle point between both tips
@@ -97,11 +96,15 @@ def printHandCoords(landmarks_list, hand_size):
     print("pinky: ", normalized_distance(landmarks_list[20], landmarks_list[0], hand_size))
     print("\n")
     
-def detect_pinch(landmarks_list, hand_size):
+    
+def detect_pinch(landmarks_list):
+    palm_center = calculate_palm_points(landmarks_list)
+    hand_size = calculate_hand_size(landmarks_list, palm_center)
+
     if normalized_distance(landmarks_list[4], landmarks_list[8], hand_size) < 0.25 and not detect_is_finger_down(landmarks_list, hand_size)['index_down']:
-        return True
-    else:
-        return False
+        dragging_point = getDraggingPoint(landmarks_list)
+        return True, dragging_point
+    return False, (0,0)
 
 
 def draw_lines(i, x1, y1, x2, y2, hand_landmarks, frame, show):
@@ -119,6 +122,8 @@ def draw_lines(i, x1, y1, x2, y2, hand_landmarks, frame, show):
 
 
 def landmarks(frame, results, show):
+    landmarks_list_per_hand = []
+
     if results.multi_hand_landmarks: # Check if there are hands detected
         for hand_landmarks in results.multi_hand_landmarks: # Iterate through the hands
             landmarks_list = []
@@ -137,22 +142,6 @@ def landmarks(frame, results, show):
 
                     draw_lines(i, x1, y1, x2, y2, hand_landmarks, frame, show)
 
-            palm_center = calculate_palm_points(landmarks_list)
-            hand_size = calculate_hand_size(landmarks_list, palm_center)
-
-            if (detect_pinch(landmarks_list, hand_size)):
-                dragging_point = getDraggingPoint(landmarks_list)
-                cv2.circle(frame, dragging_point, 10, (255, 255, 255), 2)  # Visual feedback for pinching
-            
-            # handPositionX = detect_open_palm(landmarks_list, hand_size)
-            # if handPositionX != 0:
-            #     x_hand_offset_arr = np.append(x_hand_offset_arr, handPositionX)
-            #     print(x_hand_offset_arr)
-            
-    #         if (detect_wave(x_hand_offset_arr) or len(x_hand_offset_arr) > 20):
-    #             x_hand_offset_arr = np.array([]) # reset array
+            landmarks_list_per_hand.append(landmarks_list)
                 
-    #         key = cv2.waitKey(1)
-    #         if key == ord('p'):
-    #             printHandCoords(landmarks_list, hand_size)
-    # return x_hand_offset_arr
+    return landmarks_list_per_hand
