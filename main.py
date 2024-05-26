@@ -4,7 +4,6 @@ import Hand
 import numpy as np
 from enum import Enum
 import MoveVideoBlocksTest as mvbt
-import threading
 
 # program states
 class State(Enum):
@@ -30,14 +29,6 @@ cv2.setWindowProperty(window_name, cv2.WINDOW_AUTOSIZE, cv2.WINDOW_NORMAL)
 
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-
-# def async_input_videoblock_changes():
-#     while puzzle_started:
-#         index_to_swap1 = input("Enter index to swap 1: ")
-#         index_to_swap2 = input("Enter index to swap 2: ")
-#         swap = (int(index_to_swap1), int(index_to_swap2))
-        
-#         changes_to_videoblock_order.append(swap)
 
 def get_square_index(dragging_point, height, width):
     grid_size = 4
