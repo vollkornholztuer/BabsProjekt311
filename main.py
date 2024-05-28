@@ -17,7 +17,7 @@ puzzle_started = False
 show = True # show lines
 changes_to_videoblock_order = []
 selected_square = None
-pinch_active = False
+pinch_active = False 
 
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(static_image_mode=False, max_num_hands=2, min_detection_confidence=0.5)
@@ -25,11 +25,15 @@ cap = cv2.VideoCapture(0)
 
 window_name = 'Webcam Feed'
 cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
-# cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
-cv2.setWindowProperty(window_name, cv2.WINDOW_AUTOSIZE, cv2.WINDOW_NORMAL)
+cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)    
+# cv2.setWindowProperty(window_name, cv2.WINDOW_AUTOSIZE, cv2.WINDOW_NORMAL)
 
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+logo = cv2.imread('wave.png')
+size = width // 8
+logo = cv2.resize(logo, (size, size))
 
 while True:
     ret, frame = cap.read() # Read the frame
@@ -44,9 +48,20 @@ while True:
     landmarks_list_each_hand = Hand.landmarks(hand_mask, results, show)
 
     if current_state == State.START:
+        img2gray = cv2.cvtColor(logo, cv2.COLOR_BGR2GRAY) 
+        # under 254 -> 0, over 254 -> 255
+        ret, mask = cv2.threshold(img2gray, 254, 255, cv2.THRESH_BINARY_INV)
+
+        roi = frame[10:size+10, width-size-10:width-10] 
+        
+        # # Set an index of where the mask is 
+        roi[np.where(mask)] = 0
+        roi += logo 
+
         for landmarks_list in landmarks_list_each_hand:
             if Hand.detect_wave(landmarks_list):
-                current_state = State.IN_USE
+                # current_state = State.IN_USE
+                pass
 
         combined_frame = cv2.addWeighted(frame, 1, hand_mask, 2, 0)
         cv2.imshow(window_name, combined_frame)
