@@ -1,4 +1,0 @@
-{
-    "python.autoComplete.extraPaths": [".venv\\Lib\\site-packages\\opencv_python-4.9.0.80.dist-info"],
-    "python.analysis.extraPaths": [".venv\\Lib\\site-packages\\opencv_python-4.9.0.80.dist-info"],
-}
