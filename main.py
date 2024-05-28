@@ -4,6 +4,7 @@ import Hand
 import numpy as np
 from enum import Enum
 import MoveVideoBlocksTest as mvbt
+import helper as hlp
 
 # program states
 class State(Enum):
@@ -30,16 +31,6 @@ cv2.setWindowProperty(window_name, cv2.WINDOW_AUTOSIZE, cv2.WINDOW_NORMAL)
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-def get_square_index(dragging_point, height, width):
-    grid_size = 4
-    square_height = height // grid_size
-    square_width = width // grid_size
-
-    col = dragging_point[1] // square_height
-    row = dragging_point[0] // square_width
-
-    return row * grid_size + col
-
 while True:
     ret, frame = cap.read() # Read the frame
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) # frame to RGB
@@ -63,11 +54,6 @@ while True:
     elif current_state == State.IN_USE:
         puzzle_started = True
 
-        # # Creating threads
-        # thread2 = threading.Thread(target=async_input_videoblock_changes)
-        # thread2.daemon = True
-        # thread2.start()
-
         shuffleFrame = mvbt.split_frame(frame, height, width)
         stitchFrame = mvbt.stitchBlocks(shuffleFrame, changes_to_videoblock_order)
 
@@ -77,11 +63,12 @@ while True:
             pinch_detected, dragging_point = Hand.detect_pinch(landmarks_list)
             if pinch_detected and not pinch_active:
                 cv2.circle(combined_frame, dragging_point, 10, (255, 255, 255), 2)  # Visual feedback for pinching
-                square_index = get_square_index(dragging_point, height, width)
+                square_index = hlp.get_square_index(dragging_point, height, width)
                 if selected_square is None:
                     pinch_active = True
                     selected_square = square_index
                     print("Square 1 selected")
+                # add deselect?? if selected_square == square_square
                 elif selected_square != square_index:
                     pinch_active = True
                     # Swap the squares
@@ -92,6 +79,10 @@ while True:
             # reset this biatch
             if not pinch_detected:
                 pinch_active = False
+        
+        # Indicator
+        if selected_square is not None:
+            hlp.highlight_square(combined_frame, selected_square, height, width)
 
         cv2.imshow(window_name, combined_frame)
 
