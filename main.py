@@ -48,8 +48,7 @@ while True:
     landmarks_list_each_hand = Hand.landmarks(hand_mask, results, show)
 
     if current_state == State.START:
-        # frame = hlp.indicator_image(frame, wave_image, width)
-        frame = hlp.indicator_image(frame, pinch_image, width)
+        frame = hlp.indicator_image(frame, wave_image, width)
 
         for landmarks_list in landmarks_list_each_hand:
             if Hand.detect_wave(landmarks_list):
@@ -87,12 +86,6 @@ while True:
             # reset this biatch
             if not pinch_detected:
                 pinch_active = False
-        
-        # c temp key till win con
-        key = cv2.waitKey(99)
-        if key == 99:
-            print('State switched to credits')
-            current_state = State.CREDITS
 
         # Indicator
         if selected_square is not None:
@@ -109,6 +102,9 @@ while True:
     if key == 27 or cv2.getWindowProperty(window_name, cv2.WND_PROP_VISIBLE) < 1:  # Check if the pressed key is ESC
         print('Pressed ESC or closed the window')
         break
+    elif key == 99:
+        print('State switched to credits')
+        current_state = State.CREDITS
 
 cap.release()
 cv2.destroyAllWindows()
