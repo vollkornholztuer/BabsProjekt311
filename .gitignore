@@ -5,3 +5,4 @@ pyzed-4.1-cp311-cp311-win_amd64.whl
 debug.py
 /.vscode
 /__pycache__
+*.pyc
