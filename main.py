@@ -25,15 +25,15 @@ cap = cv2.VideoCapture(0)
 
 window_name = 'Webcam Feed'
 cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
-cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)    
+cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 # cv2.setWindowProperty(window_name, cv2.WINDOW_AUTOSIZE, cv2.WINDOW_NORMAL)
 
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-logo = cv2.imread('wave.png')
-size = width // 8
-logo = cv2.resize(logo, (size, size))
+wave_image = cv2.imread('wave.png')
+pinch_image = cv2.imread('pinch.png')
+credits_image = cv2.imread('credits.jpg')
 
 while True:
     ret, frame = cap.read() # Read the frame
@@ -48,19 +48,12 @@ while True:
     landmarks_list_each_hand = Hand.landmarks(hand_mask, results, show)
 
     if current_state == State.START:
-        img2gray = cv2.cvtColor(logo, cv2.COLOR_BGR2GRAY) 
-        # under 254 -> 0, over 254 -> 255
-        ret, mask = cv2.threshold(img2gray, 254, 255, cv2.THRESH_BINARY_INV)
-
-        roi = frame[10:size+10, width-size-10:width-10] 
-        
-        # # Set an index of where the mask is 
-        roi[np.where(mask)] = 0
-        roi += logo 
+        # frame = hlp.indicator_image(frame, wave_image, width)
+        frame = hlp.indicator_image(frame, pinch_image, width)
 
         for landmarks_list in landmarks_list_each_hand:
             if Hand.detect_wave(landmarks_list):
-                # current_state = State.IN_USE
+                current_state = State.IN_USE
                 pass
 
         combined_frame = cv2.addWeighted(frame, 1, hand_mask, 2, 0)
@@ -68,7 +61,7 @@ while True:
 
     elif current_state == State.IN_USE:
         puzzle_started = True
-
+        frame = hlp.indicator_image(frame, pinch_image, width)
         shuffleFrame = mvbt.split_frame(frame, height, width)
         stitchFrame = mvbt.stitchBlocks(shuffleFrame, changes_to_videoblock_order)
 
@@ -95,15 +88,26 @@ while True:
             if not pinch_detected:
                 pinch_active = False
         
+        # c temp key till win con
+        key = cv2.waitKey(99)
+        if key == 99:
+            print('State switched to credits')
+            current_state = State.CREDITS
+
         # Indicator
         if selected_square is not None:
             hlp.highlight_square(combined_frame, selected_square, height, width)
 
         cv2.imshow(window_name, combined_frame)
+    
+    elif current_state == State.CREDITS:
+        cv2.imshow(window_name, credits_image)
+
 
     # Check if the user pressed ESC / closed the window
     key = cv2.waitKey(1)
     if key == 27 or cv2.getWindowProperty(window_name, cv2.WND_PROP_VISIBLE) < 1:  # Check if the pressed key is ESC
+        print('Pressed ESC or closed the window')
         break
 
 cap.release()
