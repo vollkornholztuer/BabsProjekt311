@@ -37,6 +37,7 @@ credits_image = cv2.imread('credits.jpg')
 
 while True:
     ret, frame = cap.read() # Read the frame
+    frame = cv2.flip(frame, 1) # Flip the frame horizontally
     original_frame = frame.copy() # original frame for win-condition
     
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) # frame to RGB
