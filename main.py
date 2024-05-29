@@ -37,6 +37,8 @@ credits_image = cv2.imread('credits.jpg')
 
 while True:
     ret, frame = cap.read() # Read the frame
+    original_frame = frame.copy() # original frame for win-condition
+    
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) # frame to RGB
 
     results = hands.process(frame_rgb) # Mediapipe detect hands
@@ -62,6 +64,11 @@ while True:
         puzzle_started = True
         frame = hlp.indicator_image(frame, pinch_image, width)
         shuffleFrame = mvbt.split_frame(frame, height, width)
+        
+        # TODO: pull pinch_image out of frame for easier comparison
+        shuffleFrame_comparison = mvbt.split_frame(original_frame, height, width)
+        stitchFrame_comparison = mvbt.stitchBlocks(shuffleFrame_comparison, changes_to_videoblock_order)
+        
         stitchFrame = mvbt.stitchBlocks(shuffleFrame, changes_to_videoblock_order)
 
         combined_frame = cv2.addWeighted(stitchFrame, 1, hand_mask, 2, 0)
@@ -92,6 +99,12 @@ while True:
             hlp.highlight_square(combined_frame, selected_square, height, width)
 
         cv2.imshow(window_name, combined_frame)
+        
+        images_compared = mvbt.compareImages(original_frame, stitchFrame_comparison)
+        
+        if images_compared:
+            print("YOU WIN")
+            current_state = State.CREDITS
     
     elif current_state == State.CREDITS:
         cv2.imshow(window_name, credits_image)

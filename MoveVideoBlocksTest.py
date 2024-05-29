@@ -1,6 +1,7 @@
 import sys
 import cv2
 import random
+import numpy as np
 
 frame_blocks_shuffeled = []
 index_videoblock = []
@@ -56,3 +57,11 @@ def stitchBlocks(frame, changes_to_videoblock_order):
     final = cv2.hconcat([row1, row2, row3, row4])
 
     return final
+
+def compareImages(image1, image2):
+    difference = cv2.subtract(image1, image2)
+    print(difference)
+    if np.count_nonzero(difference) == 0:
+        return True
+    else:
+        return False
