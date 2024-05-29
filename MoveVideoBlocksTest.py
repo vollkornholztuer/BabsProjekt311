@@ -60,7 +60,7 @@ def stitchBlocks(frame, changes_to_videoblock_order):
 
 def compareImages(image1, image2):
     difference = cv2.subtract(image1, image2)
-    print(difference)
+    # print(difference)
     if np.count_nonzero(difference) == 0:
         return True
     else:

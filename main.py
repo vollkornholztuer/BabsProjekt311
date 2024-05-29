@@ -83,6 +83,10 @@ while True:
                     selected_square = square_index
                     print("Square 1 selected")
                 # add deselect?? if selected_square == square_square
+                elif selected_square == square_index:
+                    pinch_active = True
+                    selected_square = None
+                    print("Square 1 deselected")
                 elif selected_square != square_index:
                     pinch_active = True
                     # Swap the squares
