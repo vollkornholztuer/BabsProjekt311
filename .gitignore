@@ -1,5 +1,6 @@
 /.venv
-/_pycache_
+/.vscode
+/__pycache__
 PyOpenGL_accelerate-3.1.6-cp311-cp311-win_amd64.whl
 PyOpenGL-3.1.6-cp311-cp311-win_amd64.whl
 pyzed-4.1-cp311-cp311-win_amd64.whl
