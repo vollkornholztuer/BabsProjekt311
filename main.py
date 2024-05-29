@@ -21,14 +21,20 @@ pinch_active = False
 
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(static_image_mode=False, max_num_hands=2, min_detection_confidence=0.5)
-cap = cv2.VideoCapture(0)
 
+cap = cv2.VideoCapture(0)
 window_name = 'Webcam Feed'
 cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
 cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+# Load GIF and corresponding stuff
+wave_gif = 'waving-hand.gif'
+wave_gif_frames = hlp.load_gif(wave_gif)
+wave_gif_length = len(wave_gif_frames)
+frame_index = 0
 
 wave_image = cv2.imread('wave.png')
 pinch_image = cv2.imread('pinch.png')
@@ -58,6 +64,11 @@ while True:
                 pass
 
         combined_frame = cv2.addWeighted(frame, 1, hand_mask, 2, 0)
+        
+        # Add GIF as overlay
+        wave_gif_frame = wave_gif_frames[frame_index % wave_gif_length]
+        combined_frame = hlp.overlay_gif_on_frame(combined_frame, wave_gif_frame, position=(50, 50))
+        
         cv2.imshow(window_name, combined_frame)
 
     elif current_state == State.IN_USE:
@@ -113,6 +124,7 @@ while True:
     elif current_state == State.CREDITS:
         cv2.imshow(window_name, credits_image)
 
+    frame_index += 1
 
     # Check if the user pressed ESC / closed the window
     key = cv2.waitKey(1)
