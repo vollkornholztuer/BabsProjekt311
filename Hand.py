@@ -100,8 +100,9 @@ def printHandCoords(landmarks_list, hand_size):
 def detect_pinch(landmarks_list):
     palm_center = calculate_palm_points(landmarks_list)
     hand_size = calculate_hand_size(landmarks_list, palm_center)
+    threshold = 0.15
 
-    if normalized_distance(landmarks_list[4], landmarks_list[8], hand_size) < 0.25 and not detect_is_finger_down(landmarks_list, hand_size)['index_down']:
+    if normalized_distance(landmarks_list[4], landmarks_list[8], hand_size) < threshold and not detect_is_finger_down(landmarks_list, hand_size)['index_down']:
         dragging_point = getDraggingPoint(landmarks_list)
         return True, dragging_point
     return False, (0,0)

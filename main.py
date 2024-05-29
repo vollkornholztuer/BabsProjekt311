@@ -26,7 +26,6 @@ cap = cv2.VideoCapture(0)
 window_name = 'Webcam Feed'
 cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
 cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
-# cv2.setWindowProperty(window_name, cv2.WINDOW_AUTOSIZE, cv2.WINDOW_NORMAL)
 
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
