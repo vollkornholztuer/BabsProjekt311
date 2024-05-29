@@ -20,19 +20,25 @@ Dieses Projekt ist für die Uni und macht super viel Spaß.
 
 6. ZED SDK installieren: https://www.stereolabs.com/developers/release  
 Rechner neustarten (Wie von Installationswizard verlangt)
-   
-7. ZED SDK Python-API installieren in virtuellem environment:  
+
+
+7. Requirements installieren (ZED/mediapipe/etc)
 (VSCode: Ctrl+Shift+P --> `Python: Create Terminal`)  
+In Konsole eingeben: `pip install -r requirements.txt`  
+
+<!-- 7. ZED SDK Python-API installieren in virtuellem environment:
+(VSCode: Ctrl+Shift+P -> `Python: Create Terminal`)  
 In Konsole eingeben: `pip install cython numpy opencv-python pyopengl`  
 Quelle: https://www.stereolabs.com/docs/app-development/python/install#getting-started)  
 
 8. Mediapipe wie ZED SDK Python-API (Schritt 7 installieren) mit `pip install mediapipe`
+-->
 
-9. get_python_api.py in virtuellem Environment ausführen um den Rest der Dependencies für die ZED SDK installieren.
+8. get_python_api.py in virtuellem Environment ausführen um den Rest der Dependencies für die ZED SDK installieren.
 
-10. Hoffen
+9. Hoffen
 
-11. Profit???
+10. Profit???
 
 # Troubleshooting
 
