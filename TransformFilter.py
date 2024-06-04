@@ -43,26 +43,26 @@ if image is not None:
     
     height, width, channels = image.shape
     
-    phi = 0 #wird durch mausdrag ersetzt
-    sign = 1 # erlaubt wellen
+    phi = 0 
+    sign = 1 
     while True:
         
-        shifted_image = image.copy()
-        phi = phi + 0.1 * sign
-        if phi > math.pi :
-            if sign > 0 :
+        shifted_image = image.copy() # Kopie des Originalbildes
+        phi = phi + 0.1 * sign 
+        if phi > math.pi : 
+            if sign > 0 : # wenn phi größer als pi ist und sign positiv ist, dann wird sign negativ
                 sign = -1
-            else:
+            else:   # wenn phi größer als pi ist und sign negativ ist, dann wird sign positiv
                 sign = 1
-        for y in range( height //4,height-height //4 ):
+        for y in range( height //4,height-height //4 ): # von der Mitte des Bildes bis zum Rand
             if y < height//2:
-                A = 20 * (y - height/4)/height*4
+                A = 20 * (y - height/4)/height*4 # Amplitude der Welle
             else: 
-                A = 20 * (3 * height/4 - y)/height*4
-            source_y = round( y +  A* math.cos(2* math.pi * y / height + phi))
+                A = 20 * (3 * height/4 - y)/height*4 
+            source_y = round( y +  A* math.cos(2* math.pi * y / height + phi)) # Verschiebung der Welle
             for x in range(width): 
                 
-                shifted_image[y, x] = image[source_y, x]
+                shifted_image[y, x] = image[source_y, x] # Pixelwerte aus dem ursprünglichen Bild zuweisen
         
             print(source_y, y)
         cv2.imshow('Shifted Image', shifted_image)

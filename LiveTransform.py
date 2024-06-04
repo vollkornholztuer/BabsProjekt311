@@ -24,11 +24,8 @@ def mouse_callback(event, x, y, flags, param):
 def move_image(x, y):
     global image, shifted_image, selected_pixels
     if selected_pixels is not None:  
-        # Berechne Verschiebung
-        dx = x - start_x
-        dy = y - start_y
-        # Verschiebe ausgewählte Pixel
-        shifted_image = image.copy()
+       # Verschiebe ausgewählte Pixel
+        shifted_image = image.copy() # Kopie des Originalbildes
         shifted_image[start_y-5:start_y+5, start_x-5:start_x+5] = 0  # Setze ursprüngliche Pixel auf Schwarz
         shifted_image[y-5:y+5, x-5:x+5] = selected_pixels  # Setze ausgewählte Pixel an die neue Position
         cv2.imshow('Shifted Image', shifted_image)
