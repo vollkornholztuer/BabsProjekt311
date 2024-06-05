@@ -107,3 +107,4 @@ def overlay_gif_on_frame(video_frame, gif_frame, position=(0, 0), resize_factor=
     result_frame = video_frame * (1 - alpha[..., None]) + overlay * alpha[..., None]
     result_frame = result_frame.astype(np.uint8)
     return result_frame
+

@@ -1,17 +1,20 @@
 import cv2
 import mediapipe as mp
-import Hand
 import numpy as np
 from enum import Enum
+
+import Hand
 import MoveVideoBlocksTest as mvbt
 import helper as hlp
 import State
+import Buttons
 
 # program states
 class MainState(Enum):
     START = 1
     IN_USE = 2
     CREDITS = 3
+    DIFFICULTY_SELECT = 4
 
 current_state = MainState.START
 
@@ -21,7 +24,8 @@ puzzle_diff = State.PuzzleDifficulty.NONE
 show = True # show lines
 changes_to_videoblock_order = []
 selected_square = None
-pinch_active = False 
+pinch_active = False
+difficultyChoice = 0 # 0 = no choice, 1 = normal, 2 = hard, 3 = impossible
 
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(static_image_mode=False, max_num_hands=2, min_detection_confidence=0.5)
@@ -63,7 +67,7 @@ while True:
     if current_state == MainState.START:
         for landmarks_list in landmarks_list_each_hand:
             if Hand.detect_wave(landmarks_list):
-                current_state = MainState.IN_USE
+                current_state = MainState.DIFFICULTY_SELECT
                 pass
 
         combined_frame = cv2.addWeighted(frame, 1, hand_mask, 2, 0)
@@ -75,20 +79,36 @@ while True:
         cv2.imshow(window_name, combined_frame)
 
 
+    ##### STATE DIFFICULTY_SELECT #####
+    elif current_state == MainState.DIFFICULTY_SELECT:
+        frame_with_buttons = Buttons.draw_difficulty_buttons(frame)
+        
+        for landmarks_list in landmarks_list_each_hand:
+            pinch_detected, dragging_point = Hand.detect_pinch(landmarks_list)
+            
+            if pinch_detected and not pinch_active:
+                cv2.circle(frame_with_buttons, dragging_point, 10, (255, 255, 255), 2)  # Visual feedback for pinching
+
+        combined_frame = cv2.addWeighted(frame_with_buttons, 1, hand_mask, 2, 0)
+        
+        cv2.imshow(window_name, combined_frame)
+
+
     ##### STATE IN USE #####
     elif current_state == MainState.IN_USE:
         puzzle_started = True
         
         # TODO: Choose difficulty of puzzle
-        difficultyChoice = 2 # 0 = easy, 1 = normal, 2 = hard
         
         match difficultyChoice:
-            case 0:
-                puzzle_diff = State.PuzzleDifficulty.NORMAL
             case 1:
-                puzzle_diff = State.PuzzleDifficulty.HARD
+                puzzle_diff = State.PuzzleDifficulty.NORMAL
             case 2:
+                puzzle_diff = State.PuzzleDifficulty.HARD
+            case 3:
                 puzzle_diff = State.PuzzleDifficulty.IMPOSSIBLE
+            case 0:
+                puzzle_diff = State.PuzzleDifficulty.NONE
                 
         frame = hlp.indicator_image(frame, pinch_image, width)
         shuffleFrame = mvbt.split_frame(frame, height, width, puzzle_diff)
