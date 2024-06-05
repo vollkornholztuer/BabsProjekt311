@@ -1,9 +1,19 @@
 from PIL import Image, ImageSequence
 import cv2
 import numpy as np
+import State
 
-def get_square_index(dragging_point, height, width):
-    grid_size = 4
+def get_square_index(dragging_point, height, width, puzzle_state):
+    
+    grid_size = 0
+    match puzzle_state:
+        case State.PuzzleDifficulty.NORMAL:
+            grid_size = 4
+        case State.PuzzleDifficulty.HARD:
+            grid_size = 5
+        case State.PuzzleDifficulty.IMPOSSIBLE:
+            grid_size = 8
+    
     square_height = height // grid_size
     square_width = width // grid_size
 
@@ -12,8 +22,17 @@ def get_square_index(dragging_point, height, width):
     
     return row * grid_size + col
 
-def highlight_square(frame, square_index, height, width):
-    grid_size = 4
+def highlight_square(frame, square_index, height, width, puzzle_state):
+    
+    grid_size = 0
+    match puzzle_state:
+        case State.PuzzleDifficulty.NORMAL:
+            grid_size = 4
+        case State.PuzzleDifficulty.HARD:
+            grid_size = 5
+        case State.PuzzleDifficulty.IMPOSSIBLE:
+            grid_size = 8
+    
     square_height = height // grid_size
     square_width = width // grid_size
 

@@ -80,15 +80,15 @@ while True:
         puzzle_started = True
         
         # TODO: Choose difficulty of puzzle
-        difficultyChoice = 0 # 0 = easy, 1 = normal, 2 = hard
+        difficultyChoice = 2 # 0 = easy, 1 = normal, 2 = hard
         
         match difficultyChoice:
             case 0:
-                puzzle_diff = State.PuzzleDifficulty.EASY
-            case 1:
                 puzzle_diff = State.PuzzleDifficulty.NORMAL
-            case 2:
+            case 1:
                 puzzle_diff = State.PuzzleDifficulty.HARD
+            case 2:
+                puzzle_diff = State.PuzzleDifficulty.IMPOSSIBLE
                 
         frame = hlp.indicator_image(frame, pinch_image, width)
         shuffleFrame = mvbt.split_frame(frame, height, width, puzzle_diff)
@@ -106,7 +106,7 @@ while True:
             
             if pinch_detected and not pinch_active:
                 cv2.circle(combined_frame, dragging_point, 10, (255, 255, 255), 2)  # Visual feedback for pinching
-                square_index = hlp.get_square_index(dragging_point, height, width)
+                square_index = hlp.get_square_index(dragging_point, height, width, puzzle_diff)
                 
                 if selected_square is None:
                     pinch_active = True
@@ -129,7 +129,7 @@ while True:
 
         # Indicator
         if selected_square is not None:
-            hlp.highlight_square(combined_frame, selected_square, height, width)
+            hlp.highlight_square(combined_frame, selected_square, height, width, puzzle_diff)
 
         cv2.imshow(window_name, combined_frame)
         
