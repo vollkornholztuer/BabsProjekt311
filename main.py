@@ -100,6 +100,7 @@ while True:
 
         combined_frame = cv2.addWeighted(stitchFrame, 1, hand_mask, 2, 0)
 
+        # HAND DETECTION
         for landmarks_list in landmarks_list_each_hand:
             pinch_detected, dragging_point = Hand.detect_pinch(landmarks_list)
             
