@@ -37,39 +37,48 @@ def mouse_callback(event, x, y, flags, param):
         mouse_x, mouse_y = x, y
         start_time = time.time()
 
-# Webcam initialisieren
-cap = cv2.VideoCapture(0)
+# Funktion zum Auswählen und Testen der Kamera
+def select_camera(camera_index=0):
+    global mouse_x, mouse_y, start_time
+    cap = cv2.VideoCapture(camera_index)
+    if not cap.isOpened():
+        print(f"Error: Camera with index {camera_index} could not be opened.")
+        return
 
-# Fenster für das Originalbild erstellen
-cv2.namedWindow("Original Frame")
+    # Fenster für das Originalbild erstellen
+    cv2.namedWindow("Original Frame")
 
-# Mausklickereignisse festlegen
-cv2.setMouseCallback("Original Frame", mouse_callback)
+    # Mausklickereignisse festlegen
+    cv2.setMouseCallback("Original Frame", mouse_callback)
 
-while True:
-    # Frame aus der Webcam erfassen
-    ret, frame = cap.read()
+    while True:
+        # Frame aus der Webcam erfassen
+        ret, frame = cap.read()
 
-    if not ret:
-        break
+        if not ret:
+            break
 
-    # Radiale Verschiebung durchführen und Ergebnis anzeigen, wenn Mausklick stattgefunden hat
-    if mouse_x != -1 and mouse_y != -1:
-        elapsed_time = time.time() - start_time
-        if elapsed_time < 3:
-            shifted_frame = radial_shift(frame, (mouse_x, mouse_y), amplitude=10, wavelength=50)
-            cv2.imshow("Original Frame", shifted_frame)
+        # Radiale Verschiebung durchführen und Ergebnis anzeigen, wenn Mausklick stattgefunden hat
+        if mouse_x != -1 and mouse_y != -1:
+            elapsed_time = time.time() - start_time
+            if elapsed_time < 3:
+                shifted_frame = radial_shift(frame, (mouse_x, mouse_y), amplitude=10, wavelength=50)
+                cv2.imshow("Original Frame", shifted_frame)
+            else:
+                cv2.imshow("Original Frame", frame)
+                mouse_x, mouse_y = -1, -1  # Zurücksetzen der Mausklickkoordinaten
+                start_time = None
         else:
             cv2.imshow("Original Frame", frame)
-            mouse_x, mouse_y = -1, -1  # Zurücksetzen der Mausklickkoordinaten
-            start_time = None
-    else:
-        cv2.imshow("Original Frame", frame)
 
-    # ESC zum Beenden drücken
-    if cv2.waitKey(1) == 27:
-        break
+        # ESC zum Beenden drücken
+        if cv2.waitKey(1) == 27:
+            break
 
-# Webcam-Feed freigeben und Fenster schließen
-cap.release()
-cv2.destroyAllWindows()
+    # Webcam-Feed freigeben und Fenster schließen
+    cap.release() 
+    cv2.destroyAllWindows() 
+
+
+select_camera(1)  # Auswahl der Kamera mit Index 1
+
