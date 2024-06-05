@@ -5,15 +5,19 @@ import numpy as np
 from enum import Enum
 import MoveVideoBlocksTest as mvbt
 import helper as hlp
+import State
 
 # program states
-class State(Enum):
+class MainState(Enum):
     START = 1
     IN_USE = 2
     CREDITS = 3
 
-current_state = State.START
+current_state = MainState.START
+
 puzzle_started = False
+puzzle_diff = State.PuzzleDifficulty.NONE
+
 show = True # show lines
 changes_to_videoblock_order = []
 selected_square = None
@@ -31,14 +35,13 @@ width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
 # Load GIF and corresponding stuff
-wave_gif = 'waving-hand.gif'
-wave_gif_frames = hlp.load_gif(wave_gif)
+wave_gif = 'images\waving-hand-cropped.gif'
+wave_gif_frames = hlp.resize_and_load_gif(wave_gif)
 wave_gif_length = len(wave_gif_frames)
 frame_index = 0
 
-wave_image = cv2.imread('wave.png')
-pinch_image = cv2.imread('pinch.png')
-credits_image = cv2.imread('credits.jpg')
+pinch_image = cv2.imread('images\pinch.png')
+credits_image = cv2.imread('images\credits.jpg')
 
 while True:
     ret, frame = cap.read() # Read the frame
@@ -55,12 +58,12 @@ while True:
     # Draw landmarks and ger list
     landmarks_list_each_hand = Hand.landmarks(hand_mask, results, show)
 
-    if current_state == State.START:
-        frame = hlp.indicator_image(frame, wave_image, width)
 
+    ##### STATE START #####
+    if current_state == MainState.START:
         for landmarks_list in landmarks_list_each_hand:
             if Hand.detect_wave(landmarks_list):
-                current_state = State.IN_USE
+                current_state = MainState.IN_USE
                 pass
 
         combined_frame = cv2.addWeighted(frame, 1, hand_mask, 2, 0)
@@ -71,30 +74,44 @@ while True:
         
         cv2.imshow(window_name, combined_frame)
 
-    elif current_state == State.IN_USE:
+
+    ##### STATE IN USE #####
+    elif current_state == MainState.IN_USE:
         puzzle_started = True
+        
+        # TODO: Choose difficulty of puzzle
+        difficultyChoice = 0 # 0 = easy, 1 = normal, 2 = hard
+        
+        match difficultyChoice:
+            case 0:
+                puzzle_diff = State.PuzzleDifficulty.EASY
+            case 1:
+                puzzle_diff = State.PuzzleDifficulty.NORMAL
+            case 2:
+                puzzle_diff = State.PuzzleDifficulty.HARD
+                
         frame = hlp.indicator_image(frame, pinch_image, width)
-        shuffleFrame = mvbt.split_frame(frame, height, width)
+        shuffleFrame = mvbt.split_frame(frame, height, width, puzzle_diff)
         
-        # TODO: pull pinch_image out of frame for easier comparison
-        shuffleFrame_comparison = mvbt.split_frame(original_frame, height, width)
-        stitchFrame_comparison = mvbt.stitchBlocks(shuffleFrame_comparison, changes_to_videoblock_order)
+        shuffleFrame_comparison = mvbt.split_frame(original_frame, height, width, puzzle_diff)
+        stitchFrame_comparison = mvbt.stitchBlocks(shuffleFrame_comparison, changes_to_videoblock_order, puzzle_diff)
         
-        stitchFrame = mvbt.stitchBlocks(shuffleFrame, changes_to_videoblock_order)
+        stitchFrame = mvbt.stitchBlocks(shuffleFrame, changes_to_videoblock_order, puzzle_diff)
 
         combined_frame = cv2.addWeighted(stitchFrame, 1, hand_mask, 2, 0)
 
         for landmarks_list in landmarks_list_each_hand:
             pinch_detected, dragging_point = Hand.detect_pinch(landmarks_list)
+            
             if pinch_detected and not pinch_active:
                 cv2.circle(combined_frame, dragging_point, 10, (255, 255, 255), 2)  # Visual feedback for pinching
                 square_index = hlp.get_square_index(dragging_point, height, width)
+                
                 if selected_square is None:
                     pinch_active = True
                     selected_square = square_index
                     print("Square 1 selected")
-                # add deselect?? if selected_square == square_square
-                elif selected_square == square_index:
+                elif selected_square == square_index: # Deselect square
                     pinch_active = True
                     selected_square = None
                     print("Square 1 deselected")
@@ -119,9 +136,11 @@ while True:
         
         if images_compared:
             print("YOU WIN")
-            current_state = State.CREDITS
+            current_state = MainState.CREDITS
     
-    elif current_state == State.CREDITS:
+    
+    ##### STATE CREDITS ######
+    elif current_state == MainState.CREDITS:
         cv2.imshow(window_name, credits_image)
 
     frame_index += 1
@@ -133,7 +152,7 @@ while True:
         break
     elif key == 99:
         print('State switched to credits')
-        current_state = State.CREDITS
+        current_state = MainState.CREDITS
 
 cap.release()
 cv2.destroyAllWindows()

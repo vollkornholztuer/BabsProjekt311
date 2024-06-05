@@ -49,6 +49,16 @@ def load_gif(gif_path):
         frames.append(frame)
     return frames
 
+def resize_and_load_gif(gif_path):
+    gif = Image.open(gif_path)
+    frames = []
+    for frame in ImageSequence.Iterator(gif):
+        frame = frame.convert('RGBA')  # Ensure it's in RGBA mode
+        width, height = frame.size
+        frame = frame.resize((width // 2, height // 2))
+        frames.append(frame)
+    return frames
+
 def overlay_gif_on_frame(video_frame, gif_frame, position=(0, 0), resize_factor=0.3):
     gif_np = np.array(gif_frame)  # Convert PIL Image to numpy array
     
