@@ -68,6 +68,7 @@ while True:
         for landmarks_list in landmarks_list_each_hand:
             if Hand.detect_wave(landmarks_list):
                 current_state = MainState.DIFFICULTY_SELECT
+                # current_state = MainState.DIFFICULTY_SELECT
                 pass
 
         combined_frame = cv2.addWeighted(frame, 1, hand_mask, 2, 0)
@@ -88,7 +89,15 @@ while True:
             
             if pinch_detected and not pinch_active:
                 cv2.circle(frame_with_buttons, dragging_point, 10, (255, 255, 255), 2)  # Visual feedback for pinching
-
+                
+                # Return int value of difficulty choice
+                difficultyChoice = Buttons.check_difficulty_select_coords(dragging_point)
+                
+                if difficultyChoice != 0:
+                    print(f"Difficulty choice: {difficultyChoice}")
+                    current_state = MainState.IN_USE
+                    break
+    
         combined_frame = cv2.addWeighted(frame_with_buttons, 1, hand_mask, 2, 0)
         
         cv2.imshow(window_name, combined_frame)
