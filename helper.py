@@ -108,3 +108,28 @@ def overlay_gif_on_frame(video_frame, gif_frame, position=(0, 0), resize_factor=
     result_frame = result_frame.astype(np.uint8)
     return result_frame
 
+# Maus-Callback-Funktion zum Speichern der Mausposition
+def hand_callback(event, x, y, flags, param):
+    if event == cv2.EVENT_MOUSEMOVE:
+        param['hand_position'] = (x, y)
+        param['restore'] = True
+    
+# Funktion zur Berechnung der radialen Verschiebung
+def radial_shift(frame, mouse_position, amplitude, wavelength):
+    height, width = frame.shape[:2]
+
+    x, y = np.meshgrid(np.arange(width), np.arange(height)) # Koordinatenraster erstellen
+
+    # Entfernungen und Winkel zur Mausposition berechnen
+    distance = np.sqrt((x - mouse_position[0])**2 + (y - mouse_position[1])**2) # Entfernung zur Mausposition
+    angle = np.arctan2(y - mouse_position[1], x - mouse_position[0]) # Winkel in Bogenmaß
+
+    displacement = amplitude * np.sin(distance / wavelength) # Verschiebung basierend auf Welle berechnen
+
+    # Neue Positionen nach Verschiebung berechnen
+    new_x = (x + 2 * displacement * np.cos(angle)).clip(0, width - 1).astype(int)
+    new_y = (y + 2 * displacement * np.sin(angle)).clip(0, height - 1).astype(int)
+    
+    shifted_frame = frame[new_y, new_x] # Pixelwerte aus dem ursprünglichen Bild zuweisen
+
+    return shifted_frame

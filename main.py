@@ -2,6 +2,7 @@ import cv2
 import mediapipe as mp
 import numpy as np
 from enum import Enum
+import random
 
 import Hand
 import MoveVideoBlocksTest as mvbt
@@ -11,12 +12,13 @@ import Buttons
 
 # program states
 class MainState(Enum):
+    PRE_START = 0
     START = 1
     IN_USE = 2
     CREDITS = 3
     DIFFICULTY_SELECT = 4
 
-current_state = MainState.START
+current_state = MainState.PRE_START
 
 puzzle_started = False
 puzzle_diff = State.PuzzleDifficulty.NONE
@@ -35,8 +37,17 @@ window_name = 'Webcam Feed'
 cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
 cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
-width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)) # camera dimensions
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+hand_x, hand_y = random.randint(0, width - 1), random.randint(0, height - 1) # random mouse position for distortion
+
+# Dictionary zur Speicherung der Mausposition und Wiederherstellungsstatus
+hand_data = {'hand_position': (hand_x, hand_y), 'restore': False}
+distortion_map = np.ones((height, width), dtype=np.uint8)  # Verzerrte Bereiche initialisieren
+# Maus-Callback-Funktion setzen
+cv2.setMouseCallback(window_name, hlp.hand_callback, hand_data)
+
 
 # Load GIF and corresponding stuff
 wave_gif = 'images\waving-hand-cropped.gif'
@@ -61,6 +72,37 @@ while True:
 
     # Draw landmarks and ger list
     landmarks_list_each_hand = Hand.landmarks(hand_mask, results, show)
+
+
+    ##### STATE PRE_START #####
+    if current_state == MainState.PRE_START:
+        hand_x, hand_y = hand_data['hand_position']
+        restore = hand_data['restore']
+        
+        for landmarks_list in landmarks_list_each_hand:
+            hand_x, hand_y = landmarks_list[9][0], landmarks_list[9][1]
+            pass
+            
+        # Mausposition und Wiederherstellungsstatus aus dem Dictionary abrufen
+        if restore:
+            # Update the distortion map to mark areas as restored
+            cv2.circle(distortion_map, (hand_x, hand_y), 50, 0, -1)  # Mark area as restored
+            hand_data['restore'] = False
+
+        # Verzerrtes Bild erstellen
+        shifted_frame = hlp.radial_shift(frame, (hand_x, hand_y), amplitude=10, wavelength=50)
+
+        # Bereiche ohne Verzerrung (wo die Maus sich bewegt hat) auf das verzerrte Bild anwenden
+        mask = distortion_map
+        restored_area = cv2.bitwise_and(frame, frame, mask=1 - mask)
+        distorted_area = cv2.bitwise_and(shifted_frame, shifted_frame, mask=mask)
+        result_frame = cv2.add(restored_area, distorted_area)
+    
+        
+        #TODO: Condition to switch to START state (spipe hand until picture is reset)
+        
+        combined_frame = cv2.addWeighted(result_frame, 1, hand_mask, 2, 0)
+        cv2.imshow(window_name, combined_frame)
 
 
     ##### STATE START #####
@@ -93,7 +135,7 @@ while True:
                 # Return int value of difficulty choice
                 difficultyChoice = Buttons.check_difficulty_select_coords(dragging_point)
                 
-                if difficultyChoice != 0:
+                if difficultyChoice != 0: # switch to in_use state
                     print(f"Difficulty choice: {difficultyChoice}")
                     current_state = MainState.IN_USE
                     break
