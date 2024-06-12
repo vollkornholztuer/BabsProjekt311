@@ -24,7 +24,7 @@ def radial_shift(frame, mouse_position, amplitude, wavelength):
     # Neue Positionen nach Verschiebung berechnen
     new_x = (x + displacement * np.cos(angle)).clip(0, width - 1).astype(int)
     new_y = (y + displacement * np.sin(angle)).clip(0, height - 1).astype(int)
-
+    
     # Pixelwerte aus dem ursprünglichen Bild zuweisen
     shifted_frame = frame[new_y, new_x]
 
@@ -80,5 +80,5 @@ def select_camera(camera_index=0):
     cv2.destroyAllWindows() 
 
 
-select_camera(1)  # Auswahl der Kamera mit Index 1
+select_camera(0)  # Auswahl der Kamera mit Index 1
 
