@@ -25,6 +25,11 @@ def radial_shift(frame, mouse_position, amplitude, wavelength):
 
     return shifted_frame
 
+def apply_filter(frame):
+    kernel = np.ones((3,3), np.float32) * (-1)
+    kernel[1,1] = 9
+    return cv2.filter2D(frame, -1, kernel)
+
 # Maus-Callback-Funktion zum Speichern der Mausposition
 def mouse_callback(event, x, y, flags, param):
     if event == cv2.EVENT_MOUSEMOVE:
@@ -76,7 +81,7 @@ def select_camera(camera_index=0):
         mask = distortion_map
         restored_area = cv2.bitwise_and(frame, frame, mask=1 - mask)
         distorted_area = cv2.bitwise_and(shifted_frame, shifted_frame, mask=mask)
-        result_frame = cv2.add(restored_area, distorted_area)
+        result_frame = apply_filter(cv2.add(restored_area, distorted_area))
 
         # Ergebnis anzeigen
         cv2.imshow("Original Frame", result_frame)

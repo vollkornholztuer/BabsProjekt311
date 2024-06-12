@@ -4,7 +4,7 @@ import numpy as np
 # Funktion zur Anwendung des Filters auf ein Bild
 def apply_filter(frame):
     kernel = np.ones((3,3), np.float32) * (-1)
-    kernel[1,1] = 10
+    kernel[1,1] = 8
     return cv2.filter2D(frame, -1, kernel)
 
 # Hauptfunktion
