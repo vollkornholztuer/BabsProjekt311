@@ -40,7 +40,7 @@ cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREE
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)) # camera dimensions
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-hand_x, hand_y = random.randint(0, width - 1), random.randint(0, height - 1) # random mouse position for distortion
+hand_x, hand_y = random.randint(0, width - 1), random.randint(0, height - 1) # random position for distortion
 
 # Dictionary zur Speicherung der Mausposition und Wiederherstellungsstatus
 hand_data = {'hand_position': (hand_x, hand_y), 'restore': False}
@@ -62,16 +62,11 @@ while True:
     ret, frame = cap.read() # Read the frame
     frame = cv2.flip(frame, 1) # Flip the frame horizontally
     original_frame = frame.copy() # original frame for win-condition
-    
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB) # frame to RGB
 
     results = hands.process(frame_rgb) # Mediapipe detect hands
-
-    # Create a mask for hand landmarks
-    hand_mask = np.zeros_like(frame)
-
-    # Draw landmarks and ger list
-    landmarks_list_each_hand = Hand.landmarks(hand_mask, results, show)
+    hand_mask = np.zeros_like(frame) # Create a mask for hand landmarks    
+    landmarks_list_each_hand = Hand.landmarks(hand_mask, results, show) # Draw landmarks and ger list
 
 
     ##### STATE PRE_START #####
