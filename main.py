@@ -67,13 +67,19 @@ while True:
     results = hands.process(frame_rgb) # Mediapipe detect hands
     hand_mask = np.zeros_like(frame) # Create a mask for hand landmarks    
     landmarks_list_each_hand = Hand.landmarks(hand_mask, results, show) # Draw landmarks and ger list
+    
 
+               
 
     ##### STATE PRE_START #####
     if current_state == MainState.PRE_START:
         hand_x, hand_y = hand_data['hand_position']
         restore = hand_data['restore']
-        
+        if results.multi_hand_landmarks:
+            for hand_landmarks in results.multi_hand_landmarks:
+                                
+                # Draw a white circle centered at landmark 9
+                mask = hlp.draw_white_circle(frame.shape, hand_landmarks, distortion_map)
         for landmarks_list in landmarks_list_each_hand:
             hand_x, hand_y = landmarks_list[9][0], landmarks_list[9][1]
             pass
@@ -81,13 +87,13 @@ while True:
         # Mausposition und Wiederherstellungsstatus aus dem Dictionary abrufen
         if restore:
             # Update the distortion map to mark areas as restored
-            cv2.circle(distortion_map, (hand_x, hand_y), 50, 0, -1)  # Mark area as restored
+           # cv2.circle(distortion_map, (landmark_x, landmark_y), 50, 0, -1)  # Mark area as restored
             hand_data['restore'] = False
 
-        # Verzerrtes Bild erstellen
+        #Verzerrtes Bild erstellen
         shifted_frame = hlp.radial_shift(frame, (hand_x, hand_y), amplitude=10, wavelength=50)
 
-        # Bereiche ohne Verzerrung (wo die Maus sich bewegt hat) auf das verzerrte Bild anwenden
+        #Bereiche ohne Verzerrung (wo die Maus sich bewegt hat) auf das verzerrte Bild anwenden
         mask = distortion_map
         restored_area = cv2.bitwise_and(frame, frame, mask=1 - mask)
         distorted_area = cv2.bitwise_and(shifted_frame, shifted_frame, mask=mask)

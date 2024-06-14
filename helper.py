@@ -133,3 +133,17 @@ def radial_shift(frame, mouse_position, amplitude, wavelength):
     shifted_frame = frame[new_y, new_x] # Pixelwerte aus dem ursprünglichen Bild zuweisen
 
     return shifted_frame
+
+def draw_white_circle(image_shape, hand_landmarks, distortion_map):
+    # Create a black mask image with the same size as the input image
+    #mask = np.zeros(image_shape[:2], dtype=np.uint8)
+    mask = distortion_map
+    # Extract the coordinates of landmark 9
+    landmark_9 = hand_landmarks.landmark[9]
+    landmark_x = int(landmark_9.x * image_shape[1])
+    landmark_y = int(landmark_9.y * image_shape[0])
+
+    # Draw a white circle centered at landmark 9 with a radius of 20 pixels
+    cv2.circle(mask, (landmark_x, landmark_y), 50, 0, -1)
+       
+    return landmark_x, landmark_y, mask
