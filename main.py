@@ -105,6 +105,12 @@ while True:
         combined_frame = cv2.addWeighted(result_frame, 1, hand_mask, 2, 0)
         cv2.imshow(window_name, combined_frame)
 
+        images_compared = mvbt.compareImages(original_frame, result_frame, 50)
+        
+        if images_compared:
+            print("YOU WIN")
+            current_state = MainState.START
+
 
     ##### STATE START #####
     if current_state == MainState.START:
@@ -205,7 +211,7 @@ while True:
 
         cv2.imshow(window_name, combined_frame)
         
-        images_compared = mvbt.compareImages(original_frame, stitchFrame_comparison)
+        images_compared = mvbt.compareImages(original_frame, stitchFrame_comparison, 0)
         
         if images_compared:
             print("YOU WIN")

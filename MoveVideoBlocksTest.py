@@ -226,13 +226,25 @@ def stitchBlocks(frame, changes_to_videoblock_order, puzzle_state):
             final = cv2.hconcat([row1, row2, row3, row4, row5, row6, row7, row8])
             
             return final
-    
-    
+ 
 
-def compareImages(image1, image2):
+def compareImages(image1, image2, threshold):
+    '''
+    threshold in percentage
+    \n bla bla maggion
+    '''
     difference = cv2.subtract(image1, image2)
     # print(difference)
-    if np.count_nonzero(difference) == 0:
+
+    height, width, _ = difference.shape
+    total_pixels = height * width
+    non_zero_pixels = np.count_nonzero(difference)
+    percentage_difference = (non_zero_pixels / total_pixels) * 100
+
+    # threshold in percentage
+    # alles kleiner als treshold is true
+    # aka threshold is 50% -> 49% is true, 51% is false
+    if percentage_difference <= threshold:
         return True
     else:
         return False
