@@ -117,7 +117,6 @@ while True:
         for landmarks_list in landmarks_list_each_hand:
             if Hand.detect_wave(landmarks_list):
                 current_state = MainState.DIFFICULTY_SELECT
-                # current_state = MainState.DIFFICULTY_SELECT
                 pass
 
         combined_frame = cv2.addWeighted(frame, 1, hand_mask, 2, 0)
