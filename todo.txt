@@ -1,4 +1,3 @@
-timeout wenn keine hand endeckt für x zeiteinheiten
 gif in difficulty select und puzzle für pinch einfügen
 credit screen anpassen
 handlines ersetzen
