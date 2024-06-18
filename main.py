@@ -168,7 +168,7 @@ while True:
             case 0:
                 puzzle_diff = State.PuzzleDifficulty.NONE
                 
-        frame = hlp.indicator_image(frame, pinch_image, width)
+        # frame = hlp.indicator_image(frame, pinch_image, width)
         shuffleFrame = mvbt.split_frame(frame, height, width, puzzle_diff)
         
         shuffleFrame_comparison = mvbt.split_frame(original_frame, height, width, puzzle_diff)
