@@ -108,21 +108,20 @@ def detect_pinch(landmarks_list):
     return False, (0,0)
 
 
-def draw_lines(i, x1, y1, x2, y2, hand_landmarks, frame, show):
-    if show:
-        cv2.circle(frame, (x1, y1), 5, (0, 0, 255), -1) # Draw a circle for each landmark
-        cv2.putText(frame, str(i), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1) # Write the index of the landmark
+def draw_lines(i, x1, y1, x2, y2, hand_landmarks, frame):
+    cv2.circle(frame, (x1, y1), 5, (0, 0, 255), -1) # Draw a circle for each landmark
+    cv2.putText(frame, str(i), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1) # Write the index of the landmark
 
-        if i%4 != 0:
-            cv2.line(frame, (x1, y1), (x2, y2), (0, 255, 0), 2) # Draw a line between the landmarks
-            
-            if i == 1 or i == 5 or i == 17:
-                x0 = int(hand_landmarks.landmark[0].x * frame.shape[1])
-                y0 = int(hand_landmarks.landmark[0].y * frame.shape[0])
-                cv2.line(frame, (x1, y1), (x0, y0), (0, 255, 0), 2)
+    if i%4 != 0:
+        cv2.line(frame, (x1, y1), (x2, y2), (0, 255, 0), 2) # Draw a line between the landmarks
+        
+        if i == 1 or i == 5 or i == 17:
+            x0 = int(hand_landmarks.landmark[0].x * frame.shape[1])
+            y0 = int(hand_landmarks.landmark[0].y * frame.shape[0])
+            cv2.line(frame, (x1, y1), (x0, y0), (0, 255, 0), 2)
 
 
-def landmarks(frame, results, show):
+def landmarks(frame, results):
     landmarks_list_per_hand = []
 
     if results.multi_hand_landmarks: # Check if there are hands detected
@@ -141,7 +140,7 @@ def landmarks(frame, results, show):
                     x2 = int(landmark_next.x * frame.shape[1])
                     y2 = int(landmark_next.y * frame.shape[0])
 
-                    draw_lines(i, x1, y1, x2, y2, hand_landmarks, frame, show)
+                    # draw_lines(i, x1, y1, x2, y2, hand_landmarks, frame, show)
 
             landmarks_list_per_hand.append(landmarks_list)
                 
