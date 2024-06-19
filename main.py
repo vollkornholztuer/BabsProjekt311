@@ -24,6 +24,7 @@ current_state = MainState.PRE_START
 puzzle_started = False
 puzzle_diff = State.PuzzleDifficulty.NONE
 
+show = True # show lines
 changes_to_videoblock_order = []
 selected_square = None
 pinch_active = False
@@ -71,7 +72,7 @@ while True:
 
     results = hands.process(frame_rgb) # Mediapipe detect hands
     hand_mask = np.zeros_like(frame) # Create a mask for hand landmarks    
-    landmarks_list_each_hand = Hand.landmarks(hand_mask, results) # Draw landmarks and ger list
+    landmarks_list_each_hand = Hand.landmarks(hand_mask, results, show) # Draw landmarks and ger list
 
 
     # Check for landmarks and manage timer
