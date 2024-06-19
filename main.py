@@ -66,7 +66,7 @@ credits_image = cv2.imread('images\credits.jpg')
 no_landmarks_start_time = None
 
 # Timer for resetting the game without detecting landmaigos
-reset_timer = 10
+reset_timer = 30
 
 while True:
     ret, frame = cap.read() # Read the frame
