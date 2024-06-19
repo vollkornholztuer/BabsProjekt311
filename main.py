@@ -3,6 +3,7 @@ import mediapipe as mp
 import numpy as np
 from enum import Enum
 import random
+import time
 
 import Hand
 import MoveVideoBlocksTest as mvbt
@@ -62,6 +63,11 @@ pinch_gif_length = len(pinch_gif_frames)
 pinch_image = cv2.imread('images\pinch.png')
 credits_image = cv2.imread('images\credits.jpg')
 
+no_landmarks_start_time = None
+
+# Timer for resetting the game without detecting landmaigos
+reset_timer = 10
+
 while True:
     ret, frame = cap.read() # Read the frame
     frame = cv2.flip(frame, 1) # Flip the frame horizontally
@@ -71,7 +77,22 @@ while True:
     results = hands.process(frame_rgb) # Mediapipe detect hands
     hand_mask = np.zeros_like(frame) # Create a mask for hand landmarks    
     landmarks_list_each_hand = Hand.landmarks(hand_mask, results, show) # Draw landmarks and ger list
-    
+
+
+    # Check for landmarks and manage timer
+    if not results.multi_hand_landmarks:
+        if no_landmarks_start_time is None:
+            no_landmarks_start_time = time.time()  # Start timer
+        elif time.time() - no_landmarks_start_time > reset_timer:
+            no_landmarks_start_time = None  # Reset timer
+
+            # Reset the game
+            distortion_map = np.ones((height, width), dtype=np.uint8)
+            changes_to_videoblock_order = []
+
+            current_state = MainState.PRE_START
+    else:
+        no_landmarks_start_time = None  # Reset timer if landmarks are detected
 
                
 
@@ -81,7 +102,6 @@ while True:
         restore = hand_data['restore']
         if results.multi_hand_landmarks:
             for hand_landmarks in results.multi_hand_landmarks:
-                                
                 # Draw a white circle centered at landmark 9
                 mask = hlp.draw_white_circle(frame.shape, hand_landmarks, distortion_map)
         for landmarks_list in landmarks_list_each_hand:
@@ -91,7 +111,6 @@ while True:
         # Mausposition und Wiederherstellungsstatus aus dem Dictionary abrufen
         if restore:
             # Update the distortion map to mark areas as restored
-           # cv2.circle(distortion_map, (landmark_x, landmark_y), 50, 0, -1)  # Mark area as restored
             hand_data['restore'] = False
 
         #Verzerrtes Bild erstellen
@@ -118,7 +137,6 @@ while True:
         for landmarks_list in landmarks_list_each_hand:
             if Hand.detect_wave(landmarks_list, frame_index):
                 current_state = MainState.DIFFICULTY_SELECT
-                # current_state = MainState.DIFFICULTY_SELECT
                 pass
 
         combined_frame = cv2.addWeighted(frame, 1, hand_mask, 2, 0)

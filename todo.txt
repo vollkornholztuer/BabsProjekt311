@@ -1,0 +1,10 @@
+gif in difficulty select und puzzle für pinch einfügen
+credit screen anpassen
+handlines ersetzen
+
+
+README
+DOKU
+
+
+maybe refactor (make tilo happy)
