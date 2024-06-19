@@ -109,14 +109,14 @@ while True:
         images_compared = mvbt.compareImages(original_frame, result_frame, 50)
         
         if images_compared:
-            print("YOU WIN")
             current_state = MainState.START
+            frame_index = 0
 
 
     ##### STATE START #####
     if current_state == MainState.START:
         for landmarks_list in landmarks_list_each_hand:
-            if Hand.detect_wave(landmarks_list):
+            if Hand.detect_wave(landmarks_list, frame_index):
                 current_state = MainState.DIFFICULTY_SELECT
                 # current_state = MainState.DIFFICULTY_SELECT
                 pass
