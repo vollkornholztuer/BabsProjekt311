@@ -51,7 +51,11 @@ def detect_is_finger_down(landmarks_list, hand_size):
     return finger_status
 
 
-def detect_wave(landmarks_list):
+def detect_wave(landmarks_list, frame_index):
+    if frame_index < 40:
+        return False
+    
+    
     global x_hand_positions
     threshold = 3
     min_distance = 5

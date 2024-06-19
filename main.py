@@ -56,6 +56,10 @@ wave_gif_frames = hlp.resize_and_load_gif(wave_gif)
 wave_gif_length = len(wave_gif_frames)
 frame_index = 0
 
+pinch_gif = "images\pinch_transparent.gif"
+pinch_gif_frames = hlp.load_gif(pinch_gif)
+pinch_gif_length = len(pinch_gif_frames)
+
 pinch_image = cv2.imread('images\pinch.png')
 credits_image = cv2.imread('images\credits.jpg')
 
@@ -117,9 +121,6 @@ while True:
         restored_area = cv2.bitwise_and(frame, frame, mask=1 - mask)
         distorted_area = cv2.bitwise_and(shifted_frame, shifted_frame, mask=mask)
         result_frame = cv2.add(restored_area, distorted_area)
-    
-        
-        #TODO: Condition to switch to START state (spipe hand until picture is reset)
         
         combined_frame = cv2.addWeighted(result_frame, 1, hand_mask, 2, 0)
         cv2.imshow(window_name, combined_frame)
@@ -127,14 +128,14 @@ while True:
         images_compared = mvbt.compareImages(original_frame, result_frame, 50)
         
         if images_compared:
-            print("YOU WIN")
             current_state = MainState.START
+            frame_index = 0
 
 
     ##### STATE START #####
     if current_state == MainState.START:
         for landmarks_list in landmarks_list_each_hand:
-            if Hand.detect_wave(landmarks_list):
+            if Hand.detect_wave(landmarks_list, frame_index):
                 current_state = MainState.DIFFICULTY_SELECT
                 pass
 
@@ -150,6 +151,10 @@ while True:
     ##### STATE DIFFICULTY_SELECT #####
     elif current_state == MainState.DIFFICULTY_SELECT:
         frame_with_buttons = Buttons.draw_difficulty_buttons(frame)
+        
+        # Add GIF as overlay
+        pinch_gif_frame = pinch_gif_frames[frame_index % pinch_gif_length]
+        frame_with_buttons = hlp.overlay_gif_on_frame(frame_with_buttons, pinch_gif_frame, position=(50, 100))
         
         for landmarks_list in landmarks_list_each_hand:
             pinch_detected, dragging_point = Hand.detect_pinch(landmarks_list)
@@ -174,6 +179,7 @@ while True:
     elif current_state == MainState.IN_USE:
         show = True
         puzzle_started = True
+        frame_index = 0
         
         # TODO: Choose difficulty of puzzle
         
@@ -187,7 +193,7 @@ while True:
             case 0:
                 puzzle_diff = State.PuzzleDifficulty.NONE
                 
-        frame = hlp.indicator_image(frame, pinch_image, width)
+        
         shuffleFrame = mvbt.split_frame(frame, height, width, puzzle_diff)
         
         shuffleFrame_comparison = mvbt.split_frame(original_frame, height, width, puzzle_diff)
@@ -223,6 +229,11 @@ while True:
             # reset this biatch
             if not pinch_detected:
                 pinch_active = False
+                
+        # if frame_index <= pinch_gif_length * 3: # show gif only three times
+        #     # Add GIF as overlay
+        #     pinch_gif_frame = pinch_gif_frames[frame_index % pinch_gif_length]
+        #     combined_frame = hlp.overlay_gif_on_frame(frame_with_buttons, pinch_gif_frame, position=(50, 100))
 
         # Indicator
         if selected_square is not None:
