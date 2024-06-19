@@ -24,7 +24,7 @@ current_state = MainState.PRE_START
 puzzle_started = False
 puzzle_diff = State.PuzzleDifficulty.NONE
 
-show = True # show lines
+show = False # show lines
 changes_to_videoblock_order = []
 selected_square = None
 pinch_active = False
@@ -172,6 +172,7 @@ while True:
 
     ##### STATE IN USE #####
     elif current_state == MainState.IN_USE:
+        show = True
         puzzle_started = True
         
         # TODO: Choose difficulty of puzzle
@@ -233,6 +234,7 @@ while True:
         
         if images_compared:
             print("YOU WIN")
+            show = False
             current_state = MainState.CREDITS
     
     
