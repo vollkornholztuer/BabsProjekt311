@@ -23,7 +23,7 @@ current_state = MainState.PRE_START
 puzzle_started = False
 puzzle_diff = State.PuzzleDifficulty.NONE
 
-show = True # show lines
+show = False # show lines
 changes_to_videoblock_order = []
 selected_square = None
 pinch_active = False
@@ -112,7 +112,7 @@ while True:
             hand_x, hand_y = landmarks_list[9][0], landmarks_list[9][1]
             pass
             
-        # Mausposition und Wiederherstellungsstatus aus dem Dictionary abrufen
+        # Handposition und Wiederherstellungsstatus aus dem Dictionary abrufen
         if restore:
             # Update the distortion map to mark areas as restored
             hand_data['restore'] = False
@@ -125,7 +125,7 @@ while True:
         #Verzerrtes Bild erstellen
         shifted_frame = hlp.radial_shift(frame, (hand_x, hand_y), amplitude=10, wavelength=50)
 
-        #Bereiche ohne Verzerrung (wo die Maus sich bewegt hat) auf das verzerrte Bild anwenden
+        #Bereiche ohne Verzerrung (wo die Hand sich bewegt hat) auf das verzerrte Bild anwenden
         mask = distortion_map
         restored_area = cv2.bitwise_and(frame, frame, mask=1 - mask)
         distorted_area = cv2.bitwise_and(shifted_frame, shifted_frame, mask=mask)

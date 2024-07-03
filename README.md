@@ -14,31 +14,10 @@ Dieses Projekt ist für die Uni und macht super viel Spaß.
 
 4. Virtuelles Environment in VSCode einrichten.  
 4.1. In Konsole `python -m venv .venv` eingeben (mehr Hilfe: https://www.youtube.com/watch?v=GZbeL5AcTgw)
-   
-5. CUDA 12 Toolkit herunterladen: https://developer.nvidia.com/cuda-downloads?target_os=Windows&target_arch=x86_64  
-(zwingend Notwendig für ZED SDK, evtl. Rechner nach Installation neu starten)
 
-6. ZED SDK installieren: https://www.stereolabs.com/developers/release  
-Rechner neustarten (Wie von Installationswizard verlangt)
-
-
-7. Requirements installieren (ZED/mediapipe/etc)
+5. Requirements installieren (mediapipe/etc)
 (VSCode: Ctrl+Shift+P --> `Python: Create Terminal`)  
 In Konsole eingeben: `pip install -r requirements.txt`  
-
-<!-- 7. ZED SDK Python-API installieren in virtuellem environment:
-(VSCode: Ctrl+Shift+P -> `Python: Create Terminal`)  
-In Konsole eingeben: `pip install cython numpy opencv-python pyopengl`  
-Quelle: https://www.stereolabs.com/docs/app-development/python/install#getting-started)  
-
-8. Mediapipe wie ZED SDK Python-API (Schritt 7 installieren) mit `pip install mediapipe`
--->
-
-8. get_python_api.py in virtuellem Environment ausführen um den Rest der Dependencies für die ZED SDK installieren.
-
-9. Hoffen
-
-10. Profit???
 
 # Troubleshooting
 
@@ -64,5 +43,4 @@ Beispiel:
 1. Pyinstaller installieren: `pip install pyinstaller`
 2. Datei auswählen `pyinstaller babs.spec`
 3. Image Ordner muss sich im selben Ordner wie die .exe befinden
-3. ???
-4. Profit
+3. `babs.exe` ausführen
