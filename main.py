@@ -49,7 +49,7 @@ height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
 hand_x, hand_y = random.randint(0, width - 1), random.randint(0, height - 1) # random position for distortion
 
-# Dictionary zur Speicherung der Mausposition und Wiederherstellungsstatus
+# Dictionary zur Speicherung der Handposition und Wiederherstellungsstatus
 hand_data = {'hand_position': (hand_x, hand_y), 'restore': False}
 distortion_map = np.ones((height, width), dtype=np.uint8)  # Verzerrte Bereiche initialisieren
 
@@ -189,7 +189,7 @@ while True:
         show = True
         puzzle_started = True
         
-        # TODO: Choose difficulty of puzzle
+        #Choose difficulty of puzzle
         
         match difficultyChoice:
             case 1:

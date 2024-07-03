@@ -2,9 +2,7 @@ import sys
 import cv2
 import random
 import numpy as np
-from enum import Enum
 import State
-from PIL import Image # ONLY FOR DEBUGGING, REMOVE LATER
 
 
 frame_blocks_shuffeled = []
@@ -240,7 +238,7 @@ def compareImages(image1, image2, threshold):
     percentage_difference = (non_zero_pixels / total_pixels) * 100
 
     # threshold in percentage
-    # alles kleiner als treshold is true
+    # alles kleiner als threshold is true
     # aka threshold is 50% -> 49% is true, 51% is false
     if percentage_difference <= threshold:
         return True
