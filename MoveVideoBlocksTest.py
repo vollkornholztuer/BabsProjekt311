@@ -13,12 +13,14 @@ index_videoblock = []
 seed = random.randrange(sys.maxsize)
 rng = random.Random(seed)
 
-def split_frame(frame, height, width, puzzle_state):    
-    
+# Split frame according to grid size
+def split_frame(frame, height, width, puzzle_state):        
     match puzzle_state:    
         case State.PuzzleDifficulty.NORMAL:  
-            grid_size = 4
+            grid_size = 4 # 4x4 grid
 
+            # split frame into 16 blocks with slicing
+            # syntax: frame_block_x_y (0_0 is top left)
             frame_block_0_0 = frame[0:height//grid_size, 0:width//grid_size]
             frame_block_0_1 = frame[0:height//grid_size, width//grid_size:2*width//grid_size]
             frame_block_0_2 = frame[0:height//grid_size, 2*width//grid_size:3*width//grid_size]
@@ -46,8 +48,9 @@ def split_frame(frame, height, width, puzzle_state):
             
             
         case State.PuzzleDifficulty.HARD:
-            grid_size = 5
+            grid_size = 5 # 5x5 grid
 
+            # split frame into 16 blocks
             frame_block_0_0 = frame[0:height//grid_size, 0:width//grid_size]
             frame_block_0_1 = frame[0:height//grid_size, width//grid_size:2*width//grid_size]
             frame_block_0_2 = frame[0:height//grid_size, 2*width//grid_size:3*width//grid_size]
@@ -86,8 +89,9 @@ def split_frame(frame, height, width, puzzle_state):
 
         
         case State.PuzzleDifficulty.IMPOSSIBLE:
-            grid_size = 8
+            grid_size = 8 # 8x8 grid
             
+            # split frame into 16 blocks
             frame_block_0_0 = frame[0:height//grid_size, 0:width//grid_size]
             frame_block_0_1 = frame[0:height//grid_size, width//grid_size:2*width//grid_size]
             frame_block_0_2 = frame[0:height//grid_size, 2*width//grid_size:3*width//grid_size]
@@ -176,13 +180,15 @@ def split_frame(frame, height, width, puzzle_state):
 
 def stitchBlocks(frame, changes_to_videoblock_order, puzzle_state):
     frame_blocks_shuffeled = frame
-    random.Random(seed).shuffle(frame_blocks_shuffeled) # TODO: 
+    random.Random(seed).shuffle(frame_blocks_shuffeled) # shuffle the block always the same way according to startup seed
     
+    # apply changes from interaction to the shuffled blocks
     for change in changes_to_videoblock_order:
         temp = frame_blocks_shuffeled[change[0]]
         frame_blocks_shuffeled[change[0]] = frame_blocks_shuffeled[change[1]]
         frame_blocks_shuffeled[change[1]] = temp
     
+    # stitching the blocks together acccording to the grid size
     match puzzle_state:
         case State.PuzzleDifficulty.NORMAL:
             index_videoblock[0:16] = frame_blocks_shuffeled[0:16]
@@ -228,19 +234,15 @@ def stitchBlocks(frame, changes_to_videoblock_order, puzzle_state):
  
 
 def compareImages(image1, image2, threshold):
-    '''
-    threshold in percentage
-    \n bla bla maggion
-    '''
     difference = cv2.subtract(image1, image2)
 
-    height, width, _ = difference.shape
+    height, width, _ = difference.shape # pixel-wise difference of picture
     total_pixels = height * width
-    non_zero_pixels = np.count_nonzero(difference)
+    non_zero_pixels = np.count_nonzero(difference) # count non-zero pixels
     percentage_difference = (non_zero_pixels / total_pixels) * 100
 
     # threshold in percentage
-    # alles kleiner als treshold is true
+    # alles kleiner als threshold is true
     # aka threshold is 50% -> 49% is true, 51% is false
     if percentage_difference <= threshold:
         return True
