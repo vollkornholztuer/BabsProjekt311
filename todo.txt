@@ -1,6 +1,0 @@
-credit screen anpassen
-
-README
-DOKU
-
-maybe refactor (make tilo happy)

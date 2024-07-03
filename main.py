@@ -23,7 +23,7 @@ current_state = MainState.PRE_START
 puzzle_started = False
 puzzle_diff = State.PuzzleDifficulty.NONE
 
-show = True # show lines
+show = False # show lines
 changes_to_videoblock_order = []
 selected_square = None
 pinch_active = False
@@ -34,11 +34,7 @@ hand_x_old, hand_y_old = 0, 0
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(static_image_mode=False, max_num_hands=1, min_detection_confidence=0.8)
 
-print("Kamera 1 wird initialisiert")
-cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)
-if not cap.isOpened():
-    print("Kamera 1 konnte nicht initialisiert werden \n Kamera 0 wird initialisiert")
-    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
 window_name = 'Webcam Feed'
 cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
@@ -49,7 +45,7 @@ height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
 hand_x, hand_y = random.randint(0, width - 1), random.randint(0, height - 1) # random position for distortion
 
-# Dictionary zur Speicherung der Mausposition und Wiederherstellungsstatus
+# Dictionary zur Speicherung der Handposition und Wiederherstellungsstatus
 hand_data = {'hand_position': (hand_x, hand_y), 'restore': False}
 distortion_map = np.ones((height, width), dtype=np.uint8)  # Verzerrte Bereiche initialisieren
 
@@ -112,7 +108,7 @@ while True:
             hand_x, hand_y = landmarks_list[9][0], landmarks_list[9][1]
             pass
             
-        # Mausposition und Wiederherstellungsstatus aus dem Dictionary abrufen
+        # Handposition und Wiederherstellungsstatus aus dem Dictionary abrufen
         if restore:
             # Update the distortion map to mark areas as restored
             hand_data['restore'] = False
@@ -125,7 +121,7 @@ while True:
         #Verzerrtes Bild erstellen
         shifted_frame = hlp.radial_shift(frame, (hand_x, hand_y), amplitude=10, wavelength=50)
 
-        #Bereiche ohne Verzerrung (wo die Maus sich bewegt hat) auf das verzerrte Bild anwenden
+        #Bereiche ohne Verzerrung (wo die Hand sich bewegt hat) auf das verzerrte Bild anwenden
         mask = distortion_map
         restored_area = cv2.bitwise_and(frame, frame, mask=1 - mask)
         distorted_area = cv2.bitwise_and(shifted_frame, shifted_frame, mask=mask)
@@ -189,7 +185,7 @@ while True:
         show = True
         puzzle_started = True
         
-        # TODO: Choose difficulty of puzzle
+        #Choose difficulty of puzzle
         
         match difficultyChoice:
             case 1:

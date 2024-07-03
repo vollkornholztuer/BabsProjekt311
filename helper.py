@@ -109,14 +109,14 @@ def overlay_gif_on_frame(video_frame, gif_frame, position=(0, 0), resize_factor=
     return result_frame
     
 # Funktion zur Berechnung der radialen Verschiebung
-def radial_shift(frame, mouse_position, amplitude, wavelength):
+def radial_shift(frame, hand_position, amplitude, wavelength):
     height, width = frame.shape[:2]
 
     x, y = np.meshgrid(np.arange(width), np.arange(height)) # Koordinatenraster erstellen
 
     # Entfernungen und Winkel zur Mausposition berechnen
-    distance = np.sqrt((x - mouse_position[0])**2 + (y - mouse_position[1])**2) # Entfernung zur Hand
-    angle = np.arctan2(y - mouse_position[1], x - mouse_position[0]) # Winkel in Bogenmaß
+    distance = np.sqrt((x - hand_position[0])**2 + (y - hand_position[1])**2) # Entfernung zur Hand
+    angle = np.arctan2(y - hand_position[1], x - hand_position[0]) # Winkel in Bogenmaß
 
     displacement = amplitude * np.sin(distance / wavelength) # Verschiebung basierend auf Welle berechnen
 

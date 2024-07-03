@@ -2,9 +2,7 @@ import sys
 import cv2
 import random
 import numpy as np
-from enum import Enum
 import State
-from PIL import Image # ONLY FOR DEBUGGING, REMOVE LATER
 
 
 frame_blocks_shuffeled = []
