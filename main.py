@@ -23,7 +23,7 @@ current_state = MainState.PRE_START
 puzzle_started = False
 puzzle_diff = State.PuzzleDifficulty.NONE
 
-show = False # show lines
+show = True # show lines
 changes_to_videoblock_order = []
 selected_square = None
 pinch_active = False
@@ -117,8 +117,8 @@ while True:
             # Update the distortion map to mark areas as restored
             hand_data['restore'] = False
 
-        hand_x = (hand_x_old * 3 + hand_x + 2) // 4
-        hand_y = (hand_y_old * 3 + hand_y + 2) // 4
+        hand_x = (hand_x_old * 7 + hand_x + 4) // 8
+        hand_y = (hand_y_old * 7 + hand_y + 4) // 8
         hand_x_old = hand_x
         hand_y_old = hand_y
 
