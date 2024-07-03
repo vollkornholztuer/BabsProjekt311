@@ -59,3 +59,10 @@ Beispiel:
         "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python36\\Lib\\site-packages\\cv2",
         ".venv\\Lib\\site-packages\\opencv_python-4.9.0.80.dist-info"
     ],`
+
+# Exe erstellen
+1. Pyinstaller installieren: `pip install pyinstaller`
+2. Datei auswählen `pyinstaller babs.spec`
+3. Image Ordner muss sich im selben Ordner wie die .exe befinden
+3. ???
+4. Profit
