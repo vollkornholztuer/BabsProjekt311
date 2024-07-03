@@ -76,7 +76,6 @@ def detect_wave(landmarks_list, frame_index):
                 direction_changes += 1
     
     if direction_changes >= threshold:
-        print("WAVING GESTURE DETECTED")
         return True
     return False
     
@@ -89,16 +88,6 @@ def detect_open_palm(landmarks_list, hand_size):
 def getDraggingPoint(landmarks_list): # calc middle point between both tips
     return ((landmarks_list[4][0] + landmarks_list[8][0]) // 2, (landmarks_list[4][1] + landmarks_list[8][1]) // 2)
 
-
-def printHandCoords(landmarks_list, hand_size):
-    print("\n")
-    print("thumb: ", normalized_distance(landmarks_list[4], landmarks_list[0], hand_size))
-    print("index: ", normalized_distance(landmarks_list[8], landmarks_list[0], hand_size))
-    print("middle: ", normalized_distance(landmarks_list[12], landmarks_list[0], hand_size))
-    print("ring: ", normalized_distance(landmarks_list[16], landmarks_list[0], hand_size))
-    print("pinky: ", normalized_distance(landmarks_list[20], landmarks_list[0], hand_size))
-    print("\n")
-    
     
 def detect_pinch(landmarks_list):
     palm_center = calculate_palm_points(landmarks_list)
@@ -114,7 +103,6 @@ def detect_pinch(landmarks_list):
 def draw_lines(i, x1, y1, x2, y2, hand_landmarks, frame, show):
     if show:
         cv2.circle(frame, (x1, y1), 5, (255, 255, 255), -1)  # Draw a circle for each landmark
-        cv2.putText(frame, str(i), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)  # Write the index of the landmark
 
         if i % 4 != 0:
             # Draw a black border line (thicker)

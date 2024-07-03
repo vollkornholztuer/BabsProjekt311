@@ -4,7 +4,6 @@ import numpy as np
 from enum import Enum
 import random
 import time
-
 import Hand
 import MoveVideoBlocksTest as mvbt
 import helper as hlp
@@ -168,7 +167,6 @@ while True:
                 difficultyChoice = Buttons.check_difficulty_select_coords(dragging_point)
                 
                 if difficultyChoice != 0: # switch to in_use state
-                    print(f"Difficulty choice: {difficultyChoice}")
                     current_state = MainState.IN_USE
                     frame_index = 0
                     break
@@ -216,16 +214,13 @@ while True:
                 if selected_square is None:
                     pinch_active = True
                     selected_square = square_index
-                    print("Square 1 selected")
                 elif selected_square == square_index: # Deselect square
                     pinch_active = True
                     selected_square = None
-                    print("Square 1 deselected")
                 elif selected_square != square_index:
                     pinch_active = True
                     # Swap the squares
                     changes_to_videoblock_order.append((square_index, selected_square))
-                    print("Swapped squre 1 with square 2")
                     selected_square = None  # Reset
                     
             # reset this biatch
@@ -246,7 +241,6 @@ while True:
         images_compared = mvbt.compareImages(original_frame, stitchFrame_comparison, 0)
         
         if images_compared:
-            print("YOU WIN")
             show = False
             current_state = MainState.CREDITS
             frame_index = 0
@@ -269,10 +263,8 @@ while True:
     # Check if the user pressed ESC / closed the window
     key = cv2.waitKey(1)
     if key == 27 or cv2.getWindowProperty(window_name, cv2.WND_PROP_VISIBLE) < 1:  # Check if the pressed key is ESC
-        print('Pressed ESC or closed the window')
         break
     elif key == 99:
-        print('State switched to credits')
         current_state = MainState.CREDITS
 
 cap.release()

@@ -12,7 +12,6 @@ index_videoblock = []
 
 seed = random.randrange(sys.maxsize)
 rng = random.Random(seed)
-# print("Seed was:", seed)
 
 def split_frame(frame, height, width, puzzle_state):    
     
@@ -234,7 +233,6 @@ def compareImages(image1, image2, threshold):
     \n bla bla maggion
     '''
     difference = cv2.subtract(image1, image2)
-    # print(difference)
 
     height, width, _ = difference.shape
     total_pixels = height * width
