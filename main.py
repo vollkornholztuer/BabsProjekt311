@@ -34,11 +34,7 @@ hand_x_old, hand_y_old = 0, 0
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands(static_image_mode=False, max_num_hands=1, min_detection_confidence=0.8)
 
-print("Kamera 1 wird initialisiert")
-cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)
-if not cap.isOpened():
-    print("Kamera 1 konnte nicht initialisiert werden \n Kamera 0 wird initialisiert")
-    cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
 window_name = 'Webcam Feed'
 cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
