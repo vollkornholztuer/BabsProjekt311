@@ -1,6 +1,6 @@
 import numpy as np
 import cv2
-# ingertips for clarity
+# Fingertips for clarity
 # wrist = landmarks_list[0]
 # thumb_tip = landmarks_list[4]
 # index_tip = landmarks_list[8]
@@ -54,27 +54,25 @@ def detect_wave(landmarks_list, frame_index):
     if frame_index < 40:
         return False
     
-    
     global x_hand_positions
     threshold = 3
-    min_distance = 5
+    min_distance = 2
     
-    palm_center = calculate_palm_points(landmarks_list)
-    x_hand_positions.append(palm_center[0])
+    x_hand_positions.append(landmarks_list[12][0])
     
-    # Keep only the last 20 positions
-    if len(x_hand_positions) > 20:
+    # Keep only the last X positions
+    if len(x_hand_positions) > 50:
         x_hand_positions.pop(0)
     
     direction_changes = 0
     
     # Check the number of direction changes
-    for i in range(1, len(x_hand_positions) - 1):
-        if abs(x_hand_positions[i] - x_hand_positions[i - 1]) > min_distance and abs(x_hand_positions[i] - x_hand_positions[i + 1]) > min_distance:
-            if (x_hand_positions[i] > x_hand_positions[i - 1] and x_hand_positions[i] > x_hand_positions[i + 1]) or \
-               (x_hand_positions[i] < x_hand_positions[i - 1] and x_hand_positions[i] < x_hand_positions[i + 1]):
+    for i in range(3, len(x_hand_positions) - 3):
+        if abs(x_hand_positions[i] - x_hand_positions[i - 3]) > min_distance and abs(x_hand_positions[i] - x_hand_positions[i + 3]) > min_distance:
+            if (x_hand_positions[i] > x_hand_positions[i - 3] and x_hand_positions[i] > x_hand_positions[i + 3]) or \
+                (x_hand_positions[i] < x_hand_positions[i - 3] and x_hand_positions[i] < x_hand_positions[i + 3]):
                 direction_changes += 1
-    
+
     if direction_changes >= threshold:
         return True
     return False
