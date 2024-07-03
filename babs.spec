@@ -11,9 +11,10 @@ a = Analysis(
         ('helper.py', '.'),
         ('MoveVideoBlocksTest.py', '.'),
         ('State.py', '.'),
-        ('images/credits.jpg', 'images'),
+        ('images/credit_screen.png', 'images'),
         ('images/pinch_transparent.gif', 'images'),
         ('images/waving-hand-cropped.gif', 'images'),
+        ('images/end_screen.jpg', 'images'),
         ('.venv\Lib\site-packages\mediapipe\modules', 'mediapipe\\modules')
     ],
     hiddenimports=[],

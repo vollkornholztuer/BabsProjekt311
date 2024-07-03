@@ -29,10 +29,15 @@ selected_square = None
 pinch_active = False
 difficultyChoice = 0 # 0 = no choice, 1 = normal, 2 = hard, 3 = impossible
 
-mp_hands = mp.solutions.hands
-hands = mp_hands.Hands(static_image_mode=False, max_num_hands=1, min_detection_confidence=0.5)
+hand_x_old, hand_y_old = 0, 0
 
-cap = cv2.VideoCapture(0)
+mp_hands = mp.solutions.hands
+hands = mp_hands.Hands(static_image_mode=False, max_num_hands=1, min_detection_confidence=0.7)
+
+cap = cv2.VideoCapture(1)
+if not cap.isOpened():
+    cap = cv2.VideoCapture(0)
+
 window_name = 'Webcam Feed'
 cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
 cv2.setWindowProperty(window_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
@@ -45,9 +50,6 @@ hand_x, hand_y = random.randint(0, width - 1), random.randint(0, height - 1) # r
 # Dictionary zur Speicherung der Mausposition und Wiederherstellungsstatus
 hand_data = {'hand_position': (hand_x, hand_y), 'restore': False}
 distortion_map = np.ones((height, width), dtype=np.uint8)  # Verzerrte Bereiche initialisieren
-# Maus-Callback-Funktion setzen
-cv2.setMouseCallback(window_name, hlp.hand_callback, hand_data)
-
 
 # Load GIF and corresponding stuff
 wave_gif = 'images\waving-hand-cropped.gif'
@@ -59,7 +61,6 @@ pinch_gif = "images\pinch_transparent.gif"
 pinch_gif_frames = hlp.load_gif(pinch_gif)
 pinch_gif_length = len(pinch_gif_frames)
 
-pinch_image = cv2.imread('images\pinch.png')
 end_screen_image = cv2.imread('images\end_screen.jpg')
 credits_image = cv2.imread('images\Credit_screen.png')
 
@@ -113,6 +114,11 @@ while True:
         if restore:
             # Update the distortion map to mark areas as restored
             hand_data['restore'] = False
+
+        hand_x = (hand_x_old * 3 + hand_x + 2) // 4
+        hand_y = (hand_y_old * 3 + hand_y + 2) // 4
+        hand_x_old = hand_x
+        hand_y_old = hand_y
 
         #Verzerrtes Bild erstellen
         shifted_frame = hlp.radial_shift(frame, (hand_x, hand_y), amplitude=10, wavelength=50)
