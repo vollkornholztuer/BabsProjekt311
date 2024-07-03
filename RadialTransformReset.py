@@ -28,6 +28,8 @@ def mouse_callback(event, x, y, flags, param):
         param['mouse_position'] = (x, y)
         param['restore'] = True
 
+
+
 # Funktion zum Auswählen und Testen der Kamera
 def select_camera(camera_index=0):
     cap = cv2.VideoCapture(camera_index)

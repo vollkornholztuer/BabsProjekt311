@@ -23,7 +23,6 @@ def calculate_palm_points(landmarks_list):
 
     return np.mean([wrist, thumb_base, index_base, middle_base, ring_base, pinky_base], axis=0)
 
-
 def calculate_hand_size(landmarks_list, palm_center):
     return calculate_distance(landmarks_list[0], palm_center)
 

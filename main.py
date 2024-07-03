@@ -31,7 +31,7 @@ pinch_active = False
 difficultyChoice = 0 # 0 = no choice, 1 = normal, 2 = hard, 3 = impossible
 
 mp_hands = mp.solutions.hands
-hands = mp_hands.Hands(static_image_mode=False, max_num_hands=2, min_detection_confidence=0.5)
+hands = mp_hands.Hands(static_image_mode=False, max_num_hands=1, min_detection_confidence=0.5)
 
 cap = cv2.VideoCapture(0)
 window_name = 'Webcam Feed'
@@ -61,7 +61,8 @@ pinch_gif_frames = hlp.load_gif(pinch_gif)
 pinch_gif_length = len(pinch_gif_frames)
 
 pinch_image = cv2.imread('images\pinch.png')
-credits_image = cv2.imread('images\credits.jpg')
+end_screen_image = cv2.imread('images\end_screen.jpg')
+credits_image = cv2.imread('images\Credit_screen.png')
 
 no_landmarks_start_time = None
 
@@ -98,6 +99,7 @@ while True:
 
     ##### STATE PRE_START #####
     if current_state == MainState.PRE_START:
+        reset_timer = 30
         hand_x, hand_y = hand_data['hand_position']
         restore = hand_data['restore']
         if results.multi_hand_landmarks:
@@ -168,6 +170,7 @@ while True:
                 if difficultyChoice != 0: # switch to in_use state
                     print(f"Difficulty choice: {difficultyChoice}")
                     current_state = MainState.IN_USE
+                    frame_index = 0
                     break
     
         combined_frame = cv2.addWeighted(frame_with_buttons, 1, hand_mask, 2, 0)
@@ -179,7 +182,6 @@ while True:
     elif current_state == MainState.IN_USE:
         show = True
         puzzle_started = True
-        frame_index = 0
         
         # TODO: Choose difficulty of puzzle
         
@@ -230,10 +232,10 @@ while True:
             if not pinch_detected:
                 pinch_active = False
                 
-        # if frame_index <= pinch_gif_length * 3: # show gif only three times
-        #     # Add GIF as overlay
-        #     pinch_gif_frame = pinch_gif_frames[frame_index % pinch_gif_length]
-        #     combined_frame = hlp.overlay_gif_on_frame(frame_with_buttons, pinch_gif_frame, position=(50, 100))
+        if frame_index <= pinch_gif_length * 3: # show gif only three times
+            # Add GIF as overlay
+            pinch_gif_frame = pinch_gif_frames[frame_index % pinch_gif_length]
+            combined_frame = hlp.overlay_gif_on_frame(combined_frame, pinch_gif_frame, position=(50, 100))
 
         # Indicator
         if selected_square is not None:
@@ -247,11 +249,20 @@ while True:
             print("YOU WIN")
             show = False
             current_state = MainState.CREDITS
+            frame_index = 0
     
     
     ##### STATE CREDITS ######
     elif current_state == MainState.CREDITS:
-        cv2.imshow(window_name, credits_image)
+        if frame_index < 90:
+            cv2.imshow(window_name, end_screen_image)
+        elif frame_index >= 90 and frame_index < 390:
+            cv2.imshow(window_name, credits_image)
+        else:
+            distortion_map = np.ones((height, width), dtype=np.uint8)
+            changes_to_videoblock_order = []
+            current_state = MainState.PRE_START
+            frame_index = 0
 
     frame_index += 1
 
