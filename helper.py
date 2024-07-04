@@ -5,7 +5,7 @@ import State
 
 def get_square_index(dragging_point, height, width, puzzle_state):
     
-    grid_size = 0
+    grid_size = 0 # initialie
     match puzzle_state:
         case State.PuzzleDifficulty.NORMAL:
             grid_size = 4

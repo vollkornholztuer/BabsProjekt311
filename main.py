@@ -184,7 +184,6 @@ while True:
         puzzle_started = True # puzzle has started
         
         #Choose difficulty of puzzle
-        
         match difficultyChoice:
             case 1:
                 puzzle_diff = State.PuzzleDifficulty.NORMAL

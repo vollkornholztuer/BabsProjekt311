@@ -19,12 +19,12 @@ def split_frame(frame, height, width, puzzle_state):
 
             # split frame into 16 blocks with slicing
             # syntax: frame_block_x_y (0_0 is top left)
-            frame_block_0_0 = frame[0:height//grid_size, 0:width//grid_size]
-            frame_block_0_1 = frame[0:height//grid_size, width//grid_size:2*width//grid_size]
-            frame_block_0_2 = frame[0:height//grid_size, 2*width//grid_size:3*width//grid_size]
-            frame_block_0_3 = frame[0:height//grid_size, 3*width//grid_size:4*width//grid_size]
+            frame_block_0_0 = frame[0:height//grid_size, 0:width//grid_size] # from (0,0) to (height/4, width/4)
+            frame_block_0_1 = frame[0:height//grid_size, width//grid_size:2*width//grid_size] # from (0, width/4) to (height/4, width/2) 
+            frame_block_0_2 = frame[0:height//grid_size, 2*width//grid_size:3*width//grid_size] # from (0, width/4*2) to (height/4, 3*width/4)
+            frame_block_0_3 = frame[0:height//grid_size, 3*width//grid_size:4*width//grid_size] # from (0, width/4*3) to (height/4, width)
             
-            frame_block_1_0 = frame[height//grid_size:2*height//grid_size, 0:width//grid_size]
+            frame_block_1_0 = frame[height//grid_size:2*height//grid_size, 0:width//grid_size] # etc...
             frame_block_1_1 = frame[height//grid_size:2*height//grid_size, width//grid_size:2*width//grid_size]
             frame_block_1_2 = frame[height//grid_size:2*height//grid_size, 2*width//grid_size:3*width//grid_size]
             frame_block_1_3 = frame[height//grid_size:2*height//grid_size, 3*width//grid_size:4*width//grid_size]
@@ -177,7 +177,7 @@ def split_frame(frame, height, width, puzzle_state):
     
 
 def stitchBlocks(frame, changes_to_videoblock_order, puzzle_state):
-    frame_blocks_shuffeled = frame
+    frame_blocks_shuffeled = frame # copy the frame
     random.Random(seed).shuffle(frame_blocks_shuffeled) # shuffle the block always the same way according to startup seed
     
     # apply changes from interaction to the shuffled blocks
@@ -188,20 +188,21 @@ def stitchBlocks(frame, changes_to_videoblock_order, puzzle_state):
     
     # stitching the blocks together acccording to the grid size
     match puzzle_state:
-        case State.PuzzleDifficulty.NORMAL:
+        case State.PuzzleDifficulty.NORMAL: # 4x4 grid
             index_videoblock[0:16] = frame_blocks_shuffeled[0:16]
     
+            # stitch blocks to columns together
             row1 = cv2.vconcat(index_videoblock[0:4])
             row2 = cv2.vconcat(index_videoblock[4:8])
             row3 = cv2.vconcat(index_videoblock[8:12])
             row4 = cv2.vconcat(index_videoblock[12:16])
             
-            final = cv2.hconcat([row1, row2, row3, row4])
+            final = cv2.hconcat([row1, row2, row3, row4]) # stitch columns together for final image
 
-            return final
+            return final # return the final image
         
         
-        case State.PuzzleDifficulty.HARD:
+        case State.PuzzleDifficulty.HARD: # 5x5 grid
             index_videoblock[0:25] = frame_blocks_shuffeled[0:25]
     
             row1 = cv2.vconcat(index_videoblock[0:5])
@@ -214,7 +215,7 @@ def stitchBlocks(frame, changes_to_videoblock_order, puzzle_state):
 
             return final
         
-        case State.PuzzleDifficulty.IMPOSSIBLE:
+        case State.PuzzleDifficulty.IMPOSSIBLE: # 8x8 grid
             index_videoblock[0:64] = frame_blocks_shuffeled[0:64]
             
             row1 = cv2.vconcat(index_videoblock[0:8])
@@ -232,15 +233,15 @@ def stitchBlocks(frame, changes_to_videoblock_order, puzzle_state):
  
 
 def compareImages(image1, image2, threshold):
-    difference = cv2.subtract(image1, image2)
+    difference = cv2.subtract(image1, image2) # subtract the images to get the difference
 
     height, width, _ = difference.shape # pixel-wise difference of picture
-    total_pixels = height * width
+    total_pixels = height * width # total pixels
     non_zero_pixels = np.count_nonzero(difference) # count non-zero pixels
     percentage_difference = (non_zero_pixels / total_pixels) * 100
 
     # threshold in percentage
-    # alles kleiner als threshold is true
+    # everything smaller than threshold is true
     # aka threshold is 50% -> 49% is true, 51% is false
     if percentage_difference <= threshold:
         return True
