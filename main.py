@@ -35,6 +35,9 @@ mp_hands = mp.solutions.hands # import mediapipe hand module
 hands = mp_hands.Hands(static_image_mode=False, max_num_hands=1, min_detection_confidence=0.8) # initialize hand detection and detect only one hand
 
 cap = cv2.VideoCapture(0, cv2.CAP_DSHOW) # initialize webcam capture
+if not cap.isOpened():
+    print("Error: Could not find webcam.")
+    exit()
 
 window_name = 'Webcam Feed'
 cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
