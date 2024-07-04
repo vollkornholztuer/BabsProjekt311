@@ -18,23 +18,23 @@ class MainState(Enum):
     CREDITS = 3
     DIFFICULTY_SELECT = 4
 
-current_state = MainState.PRE_START
+current_state = MainState.PRE_START # initial state
 
-puzzle_started = False
+puzzle_started = False 
 puzzle_diff = State.PuzzleDifficulty.NONE
 
-show = False # show lines
-changes_to_videoblock_order = []
-selected_square = None
-pinch_active = False
+show = False # show lines of hand detection
+changes_to_videoblock_order = [] # initialize list of changes to videoblock order
+selected_square = None # initialize selected square for swapping
+pinch_active = False # initialize pinch active state
 difficultyChoice = 0 # 0 = no choice, 1 = normal, 2 = hard, 3 = impossible
 
-hand_x_old, hand_y_old = 0, 0
+hand_x_old, hand_y_old = 0, 0 # initialize old hand position for smoothing
 
-mp_hands = mp.solutions.hands
-hands = mp_hands.Hands(static_image_mode=False, max_num_hands=1, min_detection_confidence=0.8)
+mp_hands = mp.solutions.hands # import mediapipe hand module
+hands = mp_hands.Hands(static_image_mode=False, max_num_hands=1, min_detection_confidence=0.8) # initialize hand detection and detect only one hand
 
-cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+cap = cv2.VideoCapture(0, cv2.CAP_DSHOW) # initialize webcam capture
 
 window_name = 'Webcam Feed'
 cv2.namedWindow(window_name, cv2.WND_PROP_FULLSCREEN)
@@ -59,14 +59,15 @@ pinch_gif = "images\pinch_transparent.gif"
 pinch_gif_frames = hlp.load_gif(pinch_gif)
 pinch_gif_length = len(pinch_gif_frames)
 
+# Load images
 end_screen_image = cv2.imread('images\end_screen.jpg')
 credits_image = cv2.imread('images\Credit_screen.png')
 
-no_landmarks_start_time = None
+no_landmarks_start_time = None # initialize timer for resetting the game without detecting landmarks
 
-# Timer for resetting the game without detecting landmaigos
-reset_timer = 30
+reset_timer = 30 # Timer for resetting the game without detecting landmarks
 
+# Main loop
 while True:
     ret, frame = cap.read() # Read the frame
     frame = cv2.flip(frame, 1) # Flip the frame horizontally
@@ -79,17 +80,17 @@ while True:
 
 
     # Check for landmarks and manage timer
-    if not results.multi_hand_landmarks:
-        if no_landmarks_start_time is None:
+    if not results.multi_hand_landmarks: # if no hands are detected
+        if no_landmarks_start_time is None: # if timer is not running
             no_landmarks_start_time = time.time()  # Start timer
-        elif time.time() - no_landmarks_start_time > reset_timer:
+        elif time.time() - no_landmarks_start_time > reset_timer: # if timer is running and time is up
             no_landmarks_start_time = None  # Reset timer
 
             # Reset the game
-            distortion_map = np.ones((height, width), dtype=np.uint8)
-            changes_to_videoblock_order = []
+            distortion_map = np.ones((height, width), dtype=np.uint8) # Reset distortion map
+            changes_to_videoblock_order = [] # Reset changes to videoblock order
 
-            current_state = MainState.PRE_START
+            current_state = MainState.PRE_START # Reset state
     else:
         no_landmarks_start_time = None  # Reset timer if landmarks are detected
 
@@ -97,93 +98,90 @@ while True:
 
     ##### STATE PRE_START #####
     if current_state == MainState.PRE_START:
-        reset_timer = 30
-        hand_x, hand_y = hand_data['hand_position']
-        restore = hand_data['restore']
-        if results.multi_hand_landmarks:
-            for hand_landmarks in results.multi_hand_landmarks:
-                # Draw a white circle centered at landmark 9
-                mask = hlp.draw_white_circle(frame.shape, hand_landmarks, distortion_map)
-        for landmarks_list in landmarks_list_each_hand:
-            hand_x, hand_y = landmarks_list[9][0], landmarks_list[9][1]
+        reset_timer = 30 # Reset timer for resetting the game without detecting landmarks
+        hand_x, hand_y = hand_data['hand_position'] # Retrieve hand position from the dictionary
+        restore = hand_data['restore'] # Retrieve restore status from the dictionary
+        if results.multi_hand_landmarks: # if hands are detected
+            for hand_landmarks in results.multi_hand_landmarks: # iterate through detected hands
+                mask = hlp.draw_white_circle(frame.shape, hand_landmarks, distortion_map) # Draw a white circle centered at landmark 9 (masking)
+        for landmarks_list in landmarks_list_each_hand: # iterate through detected hands
+            hand_x, hand_y = landmarks_list[9][0], landmarks_list[9][1] # Get the x and y coordinates of landmark 9 (base of middle finger)
             pass
             
-        # Handposition und Wiederherstellungsstatus aus dem Dictionary abrufen
+        # Retrieve hand position and restore status from the dictionary
         if restore:
-            # Update the distortion map to mark areas as restored
-            hand_data['restore'] = False
+            hand_data['restore'] = False # Update the distortion map to mark areas as restored
 
+        # Smoothing of hand position for less jitter when hand is detected
         hand_x = (hand_x_old * 7 + hand_x + 4) // 8
         hand_y = (hand_y_old * 7 + hand_y + 4) // 8
         hand_x_old = hand_x
         hand_y_old = hand_y
 
-        #Verzerrtes Bild erstellen
-        shifted_frame = hlp.radial_shift(frame, (hand_x, hand_y), amplitude=10, wavelength=50)
+        shifted_frame = hlp.radial_shift(frame, (hand_x, hand_y), amplitude=10, wavelength=50) # create radial shift effect
 
-        #Bereiche ohne Verzerrung (wo die Hand sich bewegt hat) auf das verzerrte Bild anwenden
-        mask = distortion_map
-        restored_area = cv2.bitwise_and(frame, frame, mask=1 - mask)
-        distorted_area = cv2.bitwise_and(shifted_frame, shifted_frame, mask=mask)
-        result_frame = cv2.add(restored_area, distorted_area)
+        # Apply areas without distortion (where the hand has moved) to the distorted image
+        mask = distortion_map # Create a mask for the restored area
+        restored_area = cv2.bitwise_and(frame, frame, mask=1 - mask) # Apply the mask to the original frame
+        distorted_area = cv2.bitwise_and(shifted_frame, shifted_frame, mask=mask) # Apply the mask to the shifted frame
+        result_frame = cv2.add(restored_area, distorted_area) # Combine the restored and distorted areas
         
-        combined_frame = cv2.addWeighted(result_frame, 1, hand_mask, 2, 0)
-        cv2.imshow(window_name, combined_frame)
+        combined_frame = cv2.addWeighted(result_frame, 1, hand_mask, 2, 0) # Add the hand mask to the frame
+        cv2.imshow(window_name, combined_frame) # Display the frame
 
-        images_compared = mvbt.compareImages(original_frame, result_frame, 50)
+        images_compared = mvbt.compareImages(original_frame, result_frame, 50) # Compare the original frame with the distorted frame (50% must match)
         
-        if images_compared:
-            current_state = MainState.START
-            frame_index = 0
+        if images_compared: # if the images match
+            current_state = MainState.START # switch to start state
+            frame_index = 0 # reset frame index for further use
 
 
     ##### STATE START #####
     if current_state == MainState.START:
-        for landmarks_list in landmarks_list_each_hand:
-            if Hand.detect_wave(landmarks_list, frame_index):
-                current_state = MainState.DIFFICULTY_SELECT
+        for landmarks_list in landmarks_list_each_hand: # iterate through detected hands
+            if Hand.detect_wave(landmarks_list, frame_index): # if wave gesture is detected
+                current_state = MainState.DIFFICULTY_SELECT # switch to difficulty select state
                 pass
 
-        combined_frame = cv2.addWeighted(frame, 1, hand_mask, 2, 0)
+        combined_frame = cv2.addWeighted(frame, 1, hand_mask, 2, 0) # Add the hand mask to the frame
         
         # Add GIF as overlay
-        wave_gif_frame = wave_gif_frames[frame_index % wave_gif_length]
-        combined_frame = hlp.overlay_gif_on_frame(combined_frame, wave_gif_frame, position=(50, 50))
+        wave_gif_frame = wave_gif_frames[frame_index % wave_gif_length] # Get the current GIF frame
+        combined_frame = hlp.overlay_gif_on_frame(combined_frame, wave_gif_frame, position=(50, 50)) # Overlay the GIF on the frame at position (50, 50)
         
-        cv2.imshow(window_name, combined_frame)
+        cv2.imshow(window_name, combined_frame) # Display the frame
 
 
     ##### STATE DIFFICULTY_SELECT #####
     elif current_state == MainState.DIFFICULTY_SELECT:
-        frame_with_buttons = Buttons.draw_difficulty_buttons(frame)
+        frame_with_buttons = Buttons.draw_difficulty_buttons(frame) # Draw the difficulty buttons on top of the frame
         
         # Add GIF as overlay
-        pinch_gif_frame = pinch_gif_frames[frame_index % pinch_gif_length]
-        frame_with_buttons = hlp.overlay_gif_on_frame(frame_with_buttons, pinch_gif_frame, position=(50, 100))
+        pinch_gif_frame = pinch_gif_frames[frame_index % pinch_gif_length] # Get the current GIF frame
+        frame_with_buttons = hlp.overlay_gif_on_frame(frame_with_buttons, pinch_gif_frame, position=(50, 100)) # Overlay the GIF on the frame at position (50, 100)
         
-        for landmarks_list in landmarks_list_each_hand:
-            pinch_detected, dragging_point = Hand.detect_pinch(landmarks_list)
+        for landmarks_list in landmarks_list_each_hand: # iterate through detected hands
+            pinch_detected, dragging_point = Hand.detect_pinch(landmarks_list) # detect pinch gesture and get dragging point
             
             if pinch_detected and not pinch_active:
                 cv2.circle(frame_with_buttons, dragging_point, 10, (255, 255, 255), 2)  # Visual feedback for pinching
                 
-                # Return int value of difficulty choice
-                difficultyChoice = Buttons.check_difficulty_select_coords(dragging_point)
+                difficultyChoice = Buttons.check_difficulty_select_coords(dragging_point) # Return int value of difficulty choice
                 
-                if difficultyChoice != 0: # switch to in_use state
-                    current_state = MainState.IN_USE
-                    frame_index = 0
+                if difficultyChoice != 0: # if a difficulty choice is made
+                    current_state = MainState.IN_USE # switch to in use state
+                    frame_index = 0 # reset frame index for further use
                     break
     
-        combined_frame = cv2.addWeighted(frame_with_buttons, 1, hand_mask, 2, 0)
+        combined_frame = cv2.addWeighted(frame_with_buttons, 1, hand_mask, 2, 0) # Add the hand mask to the frame
         
-        cv2.imshow(window_name, combined_frame)
+        cv2.imshow(window_name, combined_frame) # Display the frame
 
 
     ##### STATE IN USE #####
     elif current_state == MainState.IN_USE:
-        show = True
-        puzzle_started = True
+        show = True # show lines of hand detection
+        puzzle_started = True # puzzle has started
         
         #Choose difficulty of puzzle
         
@@ -198,69 +196,71 @@ while True:
                 puzzle_diff = State.PuzzleDifficulty.NONE
                 
         
-        shuffleFrame = mvbt.split_frame(frame, height, width, puzzle_diff)
+        shuffleFrame = mvbt.split_frame(frame, height, width, puzzle_diff) # Split the frame into blocks
         
-        shuffleFrame_comparison = mvbt.split_frame(original_frame, height, width, puzzle_diff)
-        stitchFrame_comparison = mvbt.stitchBlocks(shuffleFrame_comparison, changes_to_videoblock_order, puzzle_diff)
+        shuffleFrame_comparison = mvbt.split_frame(original_frame, height, width, puzzle_diff) # Split the original frame into blocks for comparison
+        stitchFrame_comparison = mvbt.stitchBlocks(shuffleFrame_comparison, changes_to_videoblock_order, puzzle_diff) # Stitch the blocks together for comparison
         
-        stitchFrame = mvbt.stitchBlocks(shuffleFrame, changes_to_videoblock_order, puzzle_diff)
+        stitchFrame = mvbt.stitchBlocks(shuffleFrame, changes_to_videoblock_order, puzzle_diff) # Stitch the blocks of shuffled frame together
 
-        combined_frame = cv2.addWeighted(stitchFrame, 1, hand_mask, 2, 0)
+        combined_frame = cv2.addWeighted(stitchFrame, 1, hand_mask, 2, 0) # Add the hand mask to the frame
 
         # HAND DETECTION
-        for landmarks_list in landmarks_list_each_hand:
-            pinch_detected, dragging_point = Hand.detect_pinch(landmarks_list)
+        for landmarks_list in landmarks_list_each_hand: # iterate through detected hands
+            pinch_detected, dragging_point = Hand.detect_pinch(landmarks_list) # detect pinch gesture and get dragging point
             
             if pinch_detected and not pinch_active:
                 cv2.circle(combined_frame, dragging_point, 10, (255, 255, 255), 2)  # Visual feedback for pinching
-                square_index = hlp.get_square_index(dragging_point, height, width, puzzle_diff)
+                square_index = hlp.get_square_index(dragging_point, height, width, puzzle_diff) # Get the video block index based on the dragging point
                 
-                if selected_square is None:
+                if selected_square is None: # Select square
                     pinch_active = True
                     selected_square = square_index
                 elif selected_square == square_index: # Deselect square
                     pinch_active = True
                     selected_square = None
-                elif selected_square != square_index:
+                elif selected_square != square_index: # Swap squares
                     pinch_active = True
                     # Swap the squares
-                    changes_to_videoblock_order.append((square_index, selected_square))
+                    changes_to_videoblock_order.append((square_index, selected_square)) # Append the changes to the videoblock order (for display)
                     selected_square = None  # Reset
                     
-            # reset this biatch
-            if not pinch_detected:
-                pinch_active = False
-                
+            if not pinch_detected: # if pinch is not detected
+                pinch_active = False # reset pinch active state
+          
+        # Add GIF as overlay      
         if frame_index <= pinch_gif_length * 3: # show gif only three times
-            # Add GIF as overlay
-            pinch_gif_frame = pinch_gif_frames[frame_index % pinch_gif_length]
-            combined_frame = hlp.overlay_gif_on_frame(combined_frame, pinch_gif_frame, position=(50, 100))
+            pinch_gif_frame = pinch_gif_frames[frame_index % pinch_gif_length] # Get the current GIF frame
+            combined_frame = hlp.overlay_gif_on_frame(combined_frame, pinch_gif_frame, position=(50, 100)) # Overlay the GIF on the frame at position (50, 100)
 
-        # Indicator
-        if selected_square is not None:
-            hlp.highlight_square(combined_frame, selected_square, height, width, puzzle_diff)
+        # Highlight selected square
+        if selected_square is not None: # if a square is selected
+            hlp.highlight_square(combined_frame, selected_square, height, width, puzzle_diff) # Highlight the selected square
 
         cv2.imshow(window_name, combined_frame)
         
-        images_compared = mvbt.compareImages(original_frame, stitchFrame_comparison, 0)
+        images_compared = mvbt.compareImages(original_frame, stitchFrame_comparison, 0) # Compare the original frame with the stitched frame (100% must match)
         
-        if images_compared:
-            show = False
-            current_state = MainState.CREDITS
-            frame_index = 0
+        # WIN CONDITION
+        if images_compared: # if the images match
+            show = False # hide lines of hand detection
+            current_state = MainState.CREDITS # switch to credits state
+            frame_index = 0 # reset frame index for further use
     
     
     ##### STATE CREDITS ######
-    elif current_state == MainState.CREDITS:
-        if frame_index < 90:
+    elif current_state == MainState.CREDITS: 
+        if frame_index < 90: # show end screen for 90 frames
             cv2.imshow(window_name, end_screen_image)
-        elif frame_index >= 90 and frame_index < 390:
+        elif frame_index >= 90 and frame_index < 390: # show credits for 300 frames
             cv2.imshow(window_name, credits_image)
-        else:
-            distortion_map = np.ones((height, width), dtype=np.uint8)
-            changes_to_videoblock_order = []
-            current_state = MainState.PRE_START
-            frame_index = 0
+        else: # reset the game
+            distortion_map = np.ones((height, width), dtype=np.uint8) # Reset distortion map
+            changes_to_videoblock_order = [] # Reset changes to videoblock order
+            current_state = MainState.PRE_START # switch to pre start state
+            frame_index = 0 # reset frame index for further use
+            pinch_active = False # reset pinch active state
+            selected_square = None # reset selected square
 
     frame_index += 1
 
