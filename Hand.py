@@ -82,11 +82,6 @@ def detect_wave(landmarks_list, frame_index): # detect wave motion
         return True # wave detected
     return False # wave not detected
     
-
-def detect_open_palm(landmarks_list, hand_size):
-    if not detect_is_finger_down(landmarks_list, hand_size)['index_down'] and not detect_is_finger_down(landmarks_list, hand_size)['middle_down'] and not detect_is_finger_down(landmarks_list, hand_size)['ring_down'] and not detect_is_finger_down(landmarks_list, hand_size)['pinky_down']:
-        return landmarks_list[0][1]
-    
     
 def getDraggingPoint(landmarks_list): # calc middle point between tip of thumb and index finger
     return ((landmarks_list[4][0] + landmarks_list[8][0]) // 2, (landmarks_list[4][1] + landmarks_list[8][1]) // 2)
