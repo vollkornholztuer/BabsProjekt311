@@ -130,6 +130,7 @@ def radial_shift(frame, hand_position, amplitude, wavelength):
 
 def draw_white_circle(image_shape, hand_landmarks, distortion_map):
     # Create a black mask image with the same size as the input image
+    # This circle will be used to clean the distortion and will not be directly visible
     #mask = np.zeros(image_shape[:2], dtype=np.uint8)
     mask = distortion_map
     # Extract the coordinates of landmark 9

@@ -104,14 +104,14 @@ def draw_lines(i, x1, y1, x2, y2, hand_landmarks, frame, show):
         cv2.circle(frame, (x1, y1), 5, (255, 255, 255), -1)  # Draw a circle for each landmark
 
         if i % 4 != 0:
-            cv2.line(frame, (x1, y1), (x2, y2), (0, 0, 255), 10) # Draw a black border line (thicker)
+            cv2.line(frame, (x1, y1), (x2, y2), (0, 0, 255), 10) # Draw a red border line (thicker)
             cv2.line(frame, (x1, y1), (x2, y2), (255, 255, 255), 6) # Draw a white inner line (thinner)
 
             if i == 1 or i == 5 or i == 17: # if the landmark is the wrist, thumb tip or pinky tip
                 x0 = int(hand_landmarks.landmark[0].x * frame.shape[1]) # Get the x position of the wrist
                 y0 = int(hand_landmarks.landmark[0].y * frame.shape[0]) # Get the y position of the wrist
                 
-                cv2.line(frame, (x1, y1), (x0, y0), (0, 0, 255), 10)  # Draw a black border line (thicker)
+                cv2.line(frame, (x1, y1), (x0, y0), (0, 0, 255), 10)  # Draw a red border line (thicker)
                 cv2.line(frame, (x1, y1), (x0, y0), (255, 255, 255), 6) # Draw a white inner line (thinner)
 
 
