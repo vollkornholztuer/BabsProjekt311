@@ -1,9 +1,107 @@
-<mxfile host="app.diagrams.net" modified="2024-05-15T12:35:17.936Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36" version="24.3.0" etag="7jqLr6vQXYsZNcrkBEeD" type="github">
+<mxfile host="app.diagrams.net" modified="2024-07-07T14:37:14.333Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36" etag="UvVTSFD6ugnGHyLTkK-n" version="24.2.9" type="github">
   <diagram name="Seite-1" id="LlzYT_H56VRmjGHzgrDe">
-    <mxGraphModel>
+    <mxGraphModel dx="1449" dy="1291" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-71" value="Start des Programmes" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="90" y="190" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-135" value="Marcel" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="850" y="40" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-136" value="Moritz" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="900" y="40" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-137" value="Marco" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="949" y="40" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-138" value="Konstantin" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="40" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-144" value="PRE_START" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="40" y="640" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-165" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="ascr4IpTRMl0LrxHxYnH-145" target="ascr4IpTRMl0LrxHxYnH-146">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-166" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Schwierigkeit&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;mit Hand&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;ausgewählt&lt;/font&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="ascr4IpTRMl0LrxHxYnH-165">
+          <mxGeometry x="-0.0125" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-145" value="DIFFICULTY&lt;br&gt;_SELECT" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="680" y="520" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-172" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="ascr4IpTRMl0LrxHxYnH-146" target="ascr4IpTRMl0LrxHxYnH-148">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-173" value="Puzzle gelöst" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=14;" vertex="1" connectable="0" parent="ascr4IpTRMl0LrxHxYnH-172">
+          <mxGeometry x="-0.0159" y="1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-146" value="IN_USE" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="680" y="800" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-155" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="ascr4IpTRMl0LrxHxYnH-144" target="ascr4IpTRMl0LrxHxYnH-147">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60.02640687119299" y="487.57359312880703" as="sourcePoint" />
+            <mxPoint x="375.17359312880706" y="487.57359312880703" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="210" y="700" />
+              <mxPoint x="210" y="580" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-158" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;Wischbild &quot;gelöst&quot;&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="ascr4IpTRMl0LrxHxYnH-155">
+          <mxGeometry y="1" relative="1" as="geometry">
+            <mxPoint x="81" y="-10" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-162" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="ascr4IpTRMl0LrxHxYnH-147" target="ascr4IpTRMl0LrxHxYnH-145">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-163" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Winkgeste erkannt&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="ascr4IpTRMl0LrxHxYnH-162">
+          <mxGeometry x="0.02" y="1" relative="1" as="geometry">
+            <mxPoint x="-2" y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-147" value="START" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="360" y="520" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-148" value="CREDITS" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="360" y="800" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-159" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="ascr4IpTRMl0LrxHxYnH-144" target="ascr4IpTRMl0LrxHxYnH-144">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="130" y="620" as="sourcePoint" />
+            <mxPoint x="40" y="700" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="100" y="640" />
+              <mxPoint x="100" y="620" />
+              <mxPoint x="20" y="620" />
+              <mxPoint x="20" y="700" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-160" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;30s timer&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="ascr4IpTRMl0LrxHxYnH-159">
+          <mxGeometry x="-0.41" y="-3" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-164" value="// bei allen irgendwie hinweisen, dass reset timer&lt;br&gt;und&amp;nbsp; esc rausführen&amp;nbsp;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="320" y="405" width="280" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-167" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;&lt;span style=&quot;font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial; color: rgb(88, 110, 117); font-weight: bold;&quot;&gt;class&lt;/span&gt;&lt;span style=&quot;color: rgb(101, 123, 131); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial;&quot;&gt; &lt;/span&gt;&lt;span style=&quot;font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial; color: rgb(203, 75, 22);&quot;&gt;PuzzleDifficulty&lt;/span&gt;&lt;span style=&quot;color: rgb(101, 123, 131); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial;&quot;&gt;(&lt;/span&gt;&lt;span style=&quot;font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial; color: rgb(203, 75, 22);&quot;&gt;Enum&lt;/span&gt;&lt;span style=&quot;color: rgb(101, 123, 131); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial;&quot;&gt;):&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;color: rgb(101, 123, 131); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial;&quot;&gt;&amp;nbsp; &amp;nbsp; &lt;/span&gt;&lt;span style=&quot;font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial; color: rgb(38, 139, 210);&quot;&gt;NONE&lt;/span&gt;&lt;span style=&quot;color: rgb(101, 123, 131); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial;&quot;&gt; &lt;/span&gt;&lt;span style=&quot;font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial; color: rgb(133, 153, 0);&quot;&gt;=&lt;/span&gt;&lt;span style=&quot;color: rgb(101, 123, 131); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial;&quot;&gt; &lt;/span&gt;&lt;span style=&quot;font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial; color: rgb(211, 54, 130);&quot;&gt;0&lt;/span&gt;&lt;span style=&quot;color: rgb(101, 123, 131); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial;&quot;&gt; &lt;/span&gt;&lt;br&gt;&lt;span style=&quot;color: rgb(101, 123, 131); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial;&quot;&gt;&amp;nbsp; &amp;nbsp; &lt;/span&gt;&lt;span style=&quot;font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial; color: rgb(38, 139, 210);&quot;&gt;NORMAL&lt;/span&gt;&lt;span style=&quot;color: rgb(101, 123, 131); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial;&quot;&gt; &lt;/span&gt;&lt;span style=&quot;font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial; color: rgb(133, 153, 0);&quot;&gt;=&lt;/span&gt;&lt;span style=&quot;color: rgb(101, 123, 131); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial;&quot;&gt; &lt;/span&gt;&lt;span style=&quot;font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial; color: rgb(211, 54, 130);&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span style=&quot;color: rgb(101, 123, 131); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial;&quot;&gt;&amp;nbsp; &amp;nbsp; &lt;/span&gt;&lt;span style=&quot;font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial; color: rgb(38, 139, 210);&quot;&gt;HARD&lt;/span&gt;&lt;span style=&quot;color: rgb(101, 123, 131); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial;&quot;&gt; &lt;/span&gt;&lt;span style=&quot;font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial; color: rgb(133, 153, 0);&quot;&gt;=&lt;/span&gt;&lt;span style=&quot;color: rgb(101, 123, 131); font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial;&quot;&gt; &lt;/span&gt;&lt;span style=&quot;font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; white-space: pre; background-color: initial; color: rgb(211, 54, 130);&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/font&gt;&lt;div style=&quot;font-family: Consolas, &amp;quot;Courier New&amp;quot;, monospace; line-height: 19px; white-space: pre;&quot;&gt;&lt;div style=&quot;line-height: 19px;&quot;&gt;&lt;div style=&quot;color: rgb(101, 123, 131); line-height: 19px;&quot;&gt;&lt;div style=&quot;&quot;&gt;&lt;font style=&quot;font-size: 12px;&quot;&gt;&amp;nbsp; &amp;nbsp; &lt;span style=&quot;color: rgb(38, 139, 210);&quot;&gt;IMPOSSIBLE&lt;/span&gt; &lt;span style=&quot;color: rgb(133, 153, 0);&quot;&gt;=&lt;/span&gt; &lt;span style=&quot;color: rgb(211, 54, 130);&quot;&gt;3&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.document2;whiteSpace=wrap;size=0.17963800904977303;fillColor=default;strokeColor=default;fontColor=default;labelBackgroundColor=none;align=left;" vertex="1" parent="1">
+          <mxGeometry x="870" y="680" width="210" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ascr4IpTRMl0LrxHxYnH-170" value="" style="endArrow=none;dashed=1;html=1;dashPattern=1 3;strokeWidth=2;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" target="ascr4IpTRMl0LrxHxYnH-167">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="790" y="720" as="sourcePoint" />
+            <mxPoint x="850" y="675" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
