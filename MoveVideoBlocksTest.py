@@ -1,4 +1,3 @@
-import sys
 import cv2
 import random
 import numpy as np
@@ -8,8 +7,7 @@ import State
 frame_blocks_shuffeled = []
 index_videoblock = []
 
-seed = random.randrange(sys.maxsize)
-rng = random.Random(seed)
+seed = 0 # init seed
 
 # Split frame according to grid size
 def split_frame(frame, height, width, puzzle_state):        

@@ -185,6 +185,7 @@ while True:
     elif current_state == MainState.IN_USE:
         show = True # show lines of hand detection
         puzzle_started = True # puzzle has started
+        mvbt.seed = random.randint(0, 1000)
         
         #Choose difficulty of puzzle
         match difficultyChoice:
