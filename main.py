@@ -174,6 +174,7 @@ while True:
                 if difficultyChoice != 0: # if a difficulty choice is made
                     current_state = MainState.IN_USE # switch to in use state
                     frame_index = 0 # reset frame index for further use
+                    mvbt.seed = random.randint(0, 9999)
                     break
     
         combined_frame = cv2.addWeighted(frame_with_buttons, 1, hand_mask, 2, 0) # Add the hand mask to the frame
@@ -185,7 +186,7 @@ while True:
     elif current_state == MainState.IN_USE:
         show = True # show lines of hand detection
         puzzle_started = True # puzzle has started
-        mvbt.seed = random.randint(0, 1000)
+    
         
         #Choose difficulty of puzzle
         match difficultyChoice:
